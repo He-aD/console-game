@@ -13,14 +13,19 @@ public:
 
 protected:
 	enum class characterLineRendering {
-		name = 2,
+		title = 1,
+		name,
 		healthBar,
 		asciiArt,
+		combatText,
 	};
 
 protected:
-	void renderCharactersArtAndName();
-	void renderCharacterHealthBar(constSharedCharacter character);
+	void renderStatics();
+	void renderTitle();
+	void renderCharactersName();
+	void renderCharactersArt();
+	void renderCharactersHealthBar(constSharedCharacter character);
 
 	void AlignCursorToRightCharacter();
 	void AlignCursorToLeftCharacter();

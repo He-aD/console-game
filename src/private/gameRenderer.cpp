@@ -15,25 +15,48 @@ gameRenderer::gameRenderer(sharedCharacter inCharacters[constants::nbPlayers]) {
 	system("pause");
 	this->console.clearConsole();
 
-	this->renderCharactersArtAndName();
+	this->renderStatics();
 	this->render();
 }
 
 void gameRenderer::render() {
 	for (auto character : this->characters) {
-		this->renderCharacterHealthBar(character);
+		this->renderCharactersHealthBar(character);
 	}
 }
 
-void gameRenderer::renderCharactersArtAndName() {
+void gameRenderer::renderStatics() {
+	this->renderTitle();
+	this->renderCharactersArt();
+	this->renderCharactersName();
+}
+
+void gameRenderer::renderTitle() {
+	std::ostringstream oss;
+	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::title);
+	oss << this->characters[0]->name << " vs " << this->characters[1]->name;
+
+	this->console.renderTextXCentered(oss);
+}
+
+void gameRenderer::renderCharactersName() {
+	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::name);
+
 	// render player1 name
 	this->AlignCursorToLeftCharacter();
-	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::name);
 	this->console.SetCursorPosition();
 	std::cout << this->characters[0]->name << std::endl;
 
+	// render player2 name at console extreme right 
+	this->AlignCursorToRightCharacter();
+	this->console.SetCursorPosition();
+	std::cout << this->characters[1]->name << std::endl;
+}
+
+void gameRenderer::renderCharactersArt() {
 	// render player1 art
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::asciiArt);
+	this->AlignCursorToLeftCharacter();
 	this->console.SetCursorPosition();
 	std::cout << this->characters[0]->asciiArt << std::endl;
 
@@ -56,14 +79,9 @@ void gameRenderer::renderCharactersArtAndName() {
 	}
 	lines.push_back(s);
 
-	// render player2 name at console extreme right 
-	this->AlignCursorToRightCharacter();
-	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::name);
-	this->console.SetCursorPosition();
-	std::cout << this->characters[1]->name << std::endl;
-
 	// render player2 art at console extreme right 
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::asciiArt);
+	this->AlignCursorToRightCharacter();
 	for (std::string line : lines) {
 		this->console.SetCursorPosition();
 		std::cout << line << std::endl;
@@ -71,7 +89,7 @@ void gameRenderer::renderCharactersArtAndName() {
 	}
 }
 
-void gameRenderer::renderCharacterHealthBar(constSharedCharacter character) {
+void gameRenderer::renderCharactersHealthBar(constSharedCharacter character) {
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::healthBar);
 	this->characters[0] != character ? this->AlignCursorToRightCharacter() : this->AlignCursorToLeftCharacter();
 	this->console.SetCursorPosition();
