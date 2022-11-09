@@ -9,6 +9,12 @@ gameRenderer::gameRenderer(sharedCharacter inCharacters[constants::nbPlayers]) {
 	for (unsigned short i = 0; i < constants::nbPlayers; i++) {
 		this->characters[i] = inCharacters[i];
 	}
+
+	this->console.cursorCoordinate.Y += 3;
+	this->console.renderTextXCentered("Everything is ready. Prepare to fight!!\n");
+	system("pause");
+	this->console.clearConsole();
+
 	this->renderCharactersArtAndName();
 	this->render();
 }

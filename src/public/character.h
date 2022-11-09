@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <json/json.h>
 
 class healthContainer {
 public:
@@ -30,12 +31,7 @@ struct characterData {
 		, healthBase(10)
 		, healthShield(5) {}
 
-	characterData(const std::string inAsciiArtPath, const std::string inName, const unsigned short inHealthBase,
-		const unsigned short inHealthShield)
-		: asciiArtPath(inAsciiArtPath)
-		, name(inName)
-		, healthBase(inHealthBase)
-		, healthShield(inHealthShield) {}
+	void hydrateFromJson(const Json::Value& json);
 
 	std::string asciiArtPath;
 	std::string name;

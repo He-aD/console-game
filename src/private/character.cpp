@@ -16,6 +16,13 @@ const unsigned short healthContainer::takeDamage(unsigned short amount) {
 	return this->getAmount();
 }
 
+void characterData::hydrateFromJson(const Json::Value& json) {
+	Json::Value tmp;
+	this->healthBase = json["healthBase"].asUInt();
+	this->healthShield = json["healthShield"].asUInt();
+	this->asciiArtPath = json["asciiArtPath"].asString();
+}
+
 character character::make(const characterData& Data) {
 	std::ifstream ifs{ Data.asciiArtPath };
 

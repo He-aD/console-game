@@ -7,5 +7,5 @@ game::game() {
 std::array<characterData, constants::nbPlayers> game::menu() {
 	gameMenu menu;
 	
-	return menu.gatherCharacterDatas();
+	return menu.gatherPlayerCharacterData();
 }

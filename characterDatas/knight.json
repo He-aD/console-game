@@ -1,0 +1,5 @@
+{
+    "healthBase": 20,
+    "healthShield": 50,
+    "asciiArtPath": "./assets/knight.txt"
+}
