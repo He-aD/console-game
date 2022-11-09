@@ -11,6 +11,9 @@ public:
 	// remove all characters from the console
 	void clearConsole();
 
+	// clear nb of characters in parameter from cursor position 
+	void clearX(const unsigned short nbCharacters);
+
 	// shorter function for readability
 	void SetCursorPosition() { SetConsoleCursorPosition(this->consoleHandle, this->cursorCoordinate); }
 

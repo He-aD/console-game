@@ -36,8 +36,8 @@ const std::string consoleUtil::renderTextXCentered(std::ostringstream& oss, cons
 }
 
 void consoleUtil::clearConsole() {
-    SMALL_RECT scrollRect;
-    CHAR_INFO fill;
+    SMALL_RECT scrollRect{};
+    CHAR_INFO fill{};
 
     // Scroll the rectangle of the entire buffer.
     scrollRect.Left = 0;
@@ -61,4 +61,12 @@ void consoleUtil::clearConsole() {
     this->consoleInfo.dwCursorPosition.Y = 0;
 
     SetConsoleCursorPosition(this->consoleHandle, this->consoleInfo.dwCursorPosition);
+}
+
+void consoleUtil::clearX(const unsigned short nbCharacters) {
+    this->SetCursorPosition();
+
+    for (unsigned short i = 0; i < nbCharacters; i++) {
+        std::cout << " ";
+    }
 }

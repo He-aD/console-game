@@ -1,5 +1,7 @@
 {
     "healthBase": 60,
     "healthShield": 0,
+    "attackPower": 8,
+    "abilityName": "stun",
     "asciiArtPath": "./assets/orc.txt"
 }

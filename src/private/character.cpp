@@ -11,7 +11,12 @@ const unsigned short healthContainer::takeDamage(unsigned short amount) {
 		this->shield = 0;
 	}
 
-	this->base -= amount;
+	if (this->base <= amount) {
+		this->base = 0;
+	}
+	else {
+		this->base -= amount;
+	}
 
 	return this->getAmount();
 }
@@ -21,17 +26,24 @@ void characterData::hydrateFromJson(const Json::Value& json) {
 	this->healthBase = json["healthBase"].asUInt();
 	this->healthShield = json["healthShield"].asUInt();
 	this->asciiArtPath = json["asciiArtPath"].asString();
+	this->attackPower = json["attackPower"].asUInt();
+	this->abilityName = json["abilityName"].asString();
 }
 
 character character::make(const characterData& Data) {
 	std::ifstream ifs{ Data.asciiArtPath };
+	characterAbility ability { Data.abilityName };
 
 	return character(healthContainer(Data.healthBase, Data.healthShield),
-		std::string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>()), Data.name);
+		std::string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>()), Data.name, Data.attackPower, 
+		std::move(ability));
 }
 
-character::character(healthContainer inHealth, const std::string inAsciiArt, const std::string inName)
+character::character(healthContainer inHealth, const std::string& inAsciiArt, const std::string& inName,
+	const unsigned short inAttackPower, characterAbility inAbility)
 	: health(inHealth)
 	, asciiArt(inAsciiArt)
-	, name(inName) {}
+	, name(inName)
+	, attackPower(inAttackPower)
+	, ability(inAbility) {}
 

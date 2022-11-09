@@ -16,7 +16,44 @@ gameWorld gameWorld::make(const std::array<characterData, constants::nbPlayers> 
 
 gameWorld::gameWorld(gameRenderer inRenderer, sharedCharacter inCharacters[constants::nbPlayers])
 	: renderer(inRenderer) {
+	this->state = gameState::waitToStart;
+	this->turn = 1;
+
 	for (unsigned short i = 0; i < constants::nbPlayers; i++) {
 		this->characters[i] = inCharacters[i];
+	}
+}
+
+const gameWorld::gameState gameWorld::start() {
+	this->renderer.askPlayerReady();
+
+	this->state = gameState::inProgress;
+	do {
+		this->renderer.render(*this);
+
+		for (unsigned short i = 0; i < constants::nbPlayers; i++) {
+			this->renderer.doPlayerUseAbility(i);
+		}
+
+		this->characters[0]->health.takeDamage(this->characters[1]->attackPower);
+		this->characters[1]->health.takeDamage(this->characters[0]->attackPower);
+
+		this->testGameEnd();
+
+		this->turn++;
+	} while (this->state == gameState::inProgress);
+
+	return this->state;
+}
+
+void gameWorld::testGameEnd() {
+	if (this->characters[0]->health.getAmount() == 0 && this->characters[1]->health.getAmount() == 0) {
+		this->state = gameState::draw;
+	}
+	else if (this->characters[0]->health.getAmount() == 0) {
+		this->state = gameState::player2Win;
+	}
+	else if (this->characters[1]->health.getAmount() == 0) {
+		this->state = gameState::player1Win;
 	}
 }

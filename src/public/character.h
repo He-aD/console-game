@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <json/json.h>
+#include "characterAbility.h"
 
 class healthContainer {
 public:
@@ -29,7 +30,9 @@ struct characterData {
 		: asciiArtPath("./assets/knight.txt")
 		, name("Player test")
 		, healthBase(10)
-		, healthShield(5) {}
+		, healthShield(5)
+		, attackPower(2)
+		, abilityName("charge") {}
 
 	void hydrateFromJson(const Json::Value& json);
 
@@ -37,18 +40,29 @@ struct characterData {
 	std::string name;
 	unsigned short healthBase;
 	unsigned short healthShield;
+	unsigned short attackPower;
+	std::string abilityName;
 };
 
 class character {
 public:
 	static character make(const characterData& Data);
 
-	character(healthContainer inHealth, const std::string inAsciiArt, const std::string inName);
+	character(healthContainer inHealth, const std::string& inAsciiArt, const std::string& inName, 
+		const unsigned short inAttackPower, characterAbility inAbility);
 
+	const characterAbility& GetAbility() const { return this->ability; }
+
+public:
 	healthContainer health;
+
+	const unsigned short attackPower;
 
 	const std::string asciiArt;
 	const std::string name;
+
+protected:
+	characterAbility ability;
 };
 
 typedef std::shared_ptr<character> sharedCharacter;

@@ -61,6 +61,7 @@ const std::array<characterData, constants::nbPlayers> gameMenu::gatherPlayerChar
 		if (!find) {
 			this->console.renderTextXCentered("Oops, I did not understand your choice. Try again.");
 			i--;
+			this->console.cursorCoordinate.Y++;
 			continue;
 		}
 		this->console.cursorCoordinate.Y++;
