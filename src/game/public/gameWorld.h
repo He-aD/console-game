@@ -17,8 +17,6 @@ public:
 
 	static gameWorld make(const std::array<characterData, constants::nbPlayers> datas);
 
-	gameWorld(gameRenderer inRenderer, sharedCharacter inCharacters[constants::nbPlayers]);
-
 	// start the game and return the result
 	const gameState start();
 
@@ -27,6 +25,8 @@ public:
 	const unsigned short getTurn() const { return this->turn; }
 
 private:
+	gameWorld(gameRenderer inRenderer, sharedCharacter inCharacters[constants::nbPlayers]);
+
 	// test if of the game end conditions is true
 	void testGameEnd();
 

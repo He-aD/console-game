@@ -3,6 +3,7 @@
 #include <vector>
 #include "gameWorld.h"
 #include <conio.h>
+#include <algorithm>
 
 gameRenderer::gameRenderer(sharedCharacter inCharacters[constants::nbPlayers]) {
 	this->rightArtWidth = 0;
@@ -24,7 +25,7 @@ void gameRenderer::askPlayerReady() {
 
 const bool gameRenderer::doPlayerUseAbility(const unsigned short playerIndex) {
 	std::ostringstream oss;
-	char tmp;
+	std::string tmp;
 	unsigned short lineLength = 0;
 
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
@@ -32,17 +33,25 @@ const bool gameRenderer::doPlayerUseAbility(const unsigned short playerIndex) {
 	this->console.renderTextXCentered(oss);
 	this->console.cursorCoordinate.Y++;
 
-	oss << this->characters[playerIndex]->name << " do you want to use your special ability this turn? y: yes | n: no  ";
+askInput:
+	oss << this->characters[playerIndex]->name << " do you use your ability this turn? y: yes | n: no";
 	lineLength = (unsigned short)oss.str().length();
-	
 	this->console.renderTextXCentered(oss);
+	
 	tmp = _getch();
+	std::transform(tmp.begin(), tmp.end(), tmp.begin(),
+		[](unsigned char c) {return std::tolower(c); });
+	if (tmp.find("y") == std::string::npos && tmp.find("n") == std::string::npos) {
+		oss << "Oops, wrong input. ";
+
+		goto askInput;
+	}
 
 	this->console.clearX(lineLength);
 	this->console.cursorCoordinate.Y--;
 	this->console.clearX(lineLength);
 
-	return false;
+	return tmp.find("y") != std::string::npos;
 }
 
 void gameRenderer::render(const gameWorld& world) {

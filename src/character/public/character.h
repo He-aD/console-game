@@ -48,9 +48,6 @@ class character {
 public:
 	static character make(const characterData& Data);
 
-	character(healthContainer inHealth, const std::string& inAsciiArt, const std::string& inName, 
-		const unsigned short inAttackPower, characterAbility inAbility);
-
 	const characterAbility& GetAbility() const { return this->ability; }
 
 public:
@@ -62,6 +59,9 @@ public:
 	const std::string name;
 
 protected:
+	character(healthContainer inHealth, const std::string& inAsciiArt, const std::string& inName,
+		const unsigned short inAttackPower, characterAbility inAbility);
+
 	characterAbility ability;
 };
 
