@@ -79,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);src\public</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);src\game\public;src\misc\public;src\character\public</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -144,26 +144,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="lib\json\dist\jsoncpp.cpp" />
-    <ClCompile Include="src\private\characterAbility.cpp" />
-    <ClCompile Include="src\private\character.cpp" />
-    <ClCompile Include="src\private\consoleUtil.cpp" />
-    <ClCompile Include="src\private\game.cpp" />
-    <ClCompile Include="src\private\gameMenu.cpp" />
-    <ClCompile Include="src\private\gameWorld.cpp" />
-    <ClCompile Include="src\private\gameRenderer.cpp" />
+    <ClCompile Include="src\character\private\characterAbility.cpp" />
+    <ClCompile Include="src\character\private\character.cpp" />
+    <ClCompile Include="src\misc\private\consoleUtil.cpp" />
+    <ClCompile Include="src\game\private\game.cpp" />
+    <ClCompile Include="src\game\private\gameMenu.cpp" />
+    <ClCompile Include="src\game\private\gameWorld.cpp" />
+    <ClCompile Include="src\game\private\gameRenderer.cpp" />
     <ClCompile Include="TristanGermainGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\json\dist\json\json-forwards.h" />
     <ClInclude Include="lib\json\dist\json\json.h" />
-    <ClInclude Include="src\public\characterAbility.h" />
-    <ClInclude Include="src\public\character.h" />
-    <ClInclude Include="src\public\consoleUtil.h" />
-    <ClInclude Include="src\public\constants.h" />
-    <ClInclude Include="src\public\game.h" />
-    <ClInclude Include="src\public\gameMenu.h" />
-    <ClInclude Include="src\public\gameWorld.h" />
-    <ClInclude Include="src\public\gameRenderer.h" />
+    <ClInclude Include="src\character\public\characterAbility.h" />
+    <ClInclude Include="src\character\public\character.h" />
+    <ClInclude Include="src\misc\public\consoleUtil.h" />
+    <ClInclude Include="src\misc\public\constants.h" />
+    <ClInclude Include="src\game\public\game.h" />
+    <ClInclude Include="src\game\public\gameMenu.h" />
+    <ClInclude Include="src\game\public\gameWorld.h" />
+    <ClInclude Include="src\game\public\gameRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
