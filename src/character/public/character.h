@@ -18,21 +18,26 @@ struct characterData {
 	abilityTargetCharacteristicsData characteristicData;
 };
 
+class gameWorld;
+
 class character {
 public:
-	static std::shared_ptr<character> make(const characterData& data);
+	static std::shared_ptr<character> make(const characterData& data, gameWorld& world);
 
-	const abilityBase& GetAbility() const { return *this->ability.get(); }
+	const abilityBase& getAbility() const { return *this->ability.get(); }
+	abilityBase& getAbility() { return *this->ability.get(); }
+	abilityTargetCharacteristics& getCharacteristics() { return *this->characteristics.get(); }
+	const abilityTargetCharacteristics& getCharacteristics() const { return *this->characteristics.get(); }
 
 public:
-	abilityTargetCharacteristics characteristics;
+	std::shared_ptr<abilityTargetCharacteristics> characteristics;
 
 	const std::string asciiArt;
 	const std::string name;
 
 protected:
-	character(abilityTargetCharacteristics inCharacteristics, const std::string& inAsciiArt, const std::string& inName,
-		const std::string& abilityName);
+	character(std::shared_ptr<abilityTargetCharacteristics> inCharacteristics, const std::string& inAsciiArt, 
+		const std::string& inName, const std::string& abilityName, gameWorld& world);
 
 	std::unique_ptr<abilityBase> ability;
 };

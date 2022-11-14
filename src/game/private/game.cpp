@@ -1,9 +1,9 @@
 #include "game.h"
 
 game::game() {
-	gameWorld g = gameWorld::make(std::move(this->menu()));
+	gameWorld world{ std::move(this->menu()) };
 
-	g.start();
+	world.start();
 }
 
 std::array<characterData, constants::nbPlayers> game::menu() {

@@ -150,6 +150,7 @@
     <ClCompile Include="src\ability\private\chargeAbility.cpp" />
     <ClCompile Include="src\ability\private\stunAbility.cpp" />
     <ClCompile Include="src\character\private\character.cpp" />
+    <ClCompile Include="src\game\private\gameMaster.cpp" />
     <ClCompile Include="src\misc\private\consoleUtil.cpp" />
     <ClCompile Include="src\game\private\game.cpp" />
     <ClCompile Include="src\game\private\gameMenu.cpp" />
@@ -166,12 +167,14 @@
     <ClInclude Include="src\ability\public\chargeAbility.h" />
     <ClInclude Include="src\ability\public\stunAbility.h" />
     <ClInclude Include="src\character\public\character.h" />
+    <ClInclude Include="src\game\public\gameMaster.h" />
     <ClInclude Include="src\misc\public\consoleUtil.h" />
     <ClInclude Include="src\misc\public\constants.h" />
     <ClInclude Include="src\game\public\game.h" />
     <ClInclude Include="src\game\public\gameMenu.h" />
     <ClInclude Include="src\game\public\gameWorld.h" />
     <ClInclude Include="src\game\public\gameRenderer.h" />
+    <ClInclude Include="src\misc\public\delegate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

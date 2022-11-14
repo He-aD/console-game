@@ -4,7 +4,7 @@
 
 class stunAbility final : public abilityBase {
 public:
-	stunAbility(const abilityData& data);
+	stunAbility(const abilityData& data, gameWorld& world, std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristic);
 
-	virtual const bool process(const abilityTargetCharacteristics& characteristic);
+	virtual const bool process(abilityTargetCharacteristics& characteristics);
 };

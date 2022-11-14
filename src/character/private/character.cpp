@@ -7,19 +7,22 @@ void characterData::hydrateFromJson(const Json::Value& json) {
 	this->abilityName = json["abilityName"].asString();
 }
 
-std::shared_ptr<character> character::make(const characterData& data) {
+std::shared_ptr<character> character::make(const characterData& data, gameWorld& world) {
 	std::ifstream ifs{ data.asciiArtPath };
-	abilityTargetCharacteristics characteristics { data.characteristicData };
 
-	return std::shared_ptr<character>(new character(std::move(characteristics),
-		std::string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>()), data.name, data.abilityName));
+	return std::shared_ptr<character>(new character(
+		std::move(std::make_shared<abilityTargetCharacteristics>(data.characteristicData, world)),
+		std::string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>()), 
+		data.name, 
+		data.abilityName, 
+		world));
 }
 
-character::character(abilityTargetCharacteristics inCharacteristics, const std::string& inAsciiArt, const std::string& inName,
-	const std::string& abilityName)
+character::character(std::shared_ptr<abilityTargetCharacteristics> inCharacteristics, const std::string& inAsciiArt, 
+	const std::string& inName, const std::string& abilityName, gameWorld& world)
 	: characteristics(inCharacteristics)
 	, asciiArt(inAsciiArt)
 	, name(inName) {
-	this->ability = std::move(abilityFactory::make(abilityName.c_str()));
+	this->ability = std::move(abilityFactory::make(abilityName.c_str(), world, this->characteristics));
 }
 

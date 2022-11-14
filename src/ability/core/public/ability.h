@@ -18,21 +18,34 @@ struct abilityData {
 	unsigned short cooldown;
 };
 
+class gameWorld;
+
 class abilityBase {
 public:
-	abilityBase(const abilityData& data, const std::string inName);
+	abilityBase(const abilityData& data, const std::string inName, gameWorld& inWorld, 
+		std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristics);
 
-	virtual const bool process(const abilityTargetCharacteristics& characteristic) = 0;
+	virtual const bool process(abilityTargetCharacteristics& characteristics) = 0;
 
-	const unsigned short nbTurnToBeAvailable() const { return 0; }
+	const unsigned short getNbTurnToBeAvailable() const { return this->nbTurnToBeAvailable; }
 
 	const unsigned short probabilityOfSuccess;
 	const std::string message;
 	const unsigned short cooldown;
 	const std::string name;
+
+protected:
+	void startCooldown();
+	void onNewTurn(const unsigned short turn);
+	const bool doCastSucceed();
+
+	gameWorld* world;
+	std::shared_ptr<abilityTargetCharacteristics> ownerCharacteristics;
+	unsigned short nbTurnToBeAvailable;
 };
 
 class abilityFactory {
 public:
-	static std::unique_ptr<abilityBase> make(const char* abilityName);
+	static std::unique_ptr<abilityBase> make(const char* abilityName, gameWorld& world,
+		std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristics);
 };

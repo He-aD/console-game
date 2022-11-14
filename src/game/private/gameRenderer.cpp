@@ -135,9 +135,9 @@ void gameRenderer::renderCharactersHealthBar(constSharedCharacter character) {
 	this->AlignCursorToCharacter(character);
 
 	std::string healthBar{ "[HP: " };
-	healthBar += std::to_string(character->characteristics.health.getBase());
-	if (character->characteristics.health.getShield() > 0) {
-		healthBar += " | SH: " + std::to_string(character->characteristics.health.getShield());
+	healthBar += std::to_string(character->getCharacteristics().health.getBase());
+	if (character->getCharacteristics().health.getShield() > 0) {
+		healthBar += " | SH: " + std::to_string(character->getCharacteristics().health.getShield());
 	}
 	healthBar.append("]");
 
@@ -147,11 +147,11 @@ void gameRenderer::renderCharactersHealthBar(constSharedCharacter character) {
 void gameRenderer::renderCharacterAbility(constSharedCharacter character) {
 	constexpr unsigned short maxWidth = 32;
 	std::ostringstream oss; 
-	const abilityBase& ability = character->GetAbility();
+	const abilityBase& ability = character->getAbility();
 
 	oss << ability.name << " available ";
-	if (ability.nbTurnToBeAvailable() > 0) {
-		oss << "in " << ability.nbTurnToBeAvailable() << " turn";
+	if (ability.getNbTurnToBeAvailable() > 0) {
+		oss << "in " << ability.getNbTurnToBeAvailable() << " turn";
 	}
 
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::ability);

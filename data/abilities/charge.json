@@ -4,6 +4,5 @@
         "probabilityOfSuccess": 60,
         "message": "concentrate all his power to hit twice as hard"
     },
-    "damageMultiplier": 2,
-    "duration": 1
+    "damageMultiplier": 2
 }
