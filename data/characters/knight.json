@@ -1,0 +1,9 @@
+{
+    "abilityTargetCharacteristics": {
+        "healthBase": 20,
+        "healthShield": 50,
+        "attackPower": 5
+    },
+    "abilityName": "charge",
+    "asciiArtPath": "./assets/knight.txt"
+}

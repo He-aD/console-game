@@ -79,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);src\game\public;src\misc\public;src\character\public</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);src\game\public;src\misc\public;src\character\public;src\ability\public;src\ability\core\public</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -144,7 +144,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="lib\json\dist\jsoncpp.cpp" />
-    <ClCompile Include="src\character\private\characterAbility.cpp" />
+    <ClCompile Include="src\ability\core\private\ability.cpp" />
+    <ClCompile Include="src\ability\core\private\health.cpp" />
+    <ClCompile Include="src\ability\core\private\abilityTargetCharacteristics.cpp" />
+    <ClCompile Include="src\ability\private\chargeAbility.cpp" />
+    <ClCompile Include="src\ability\private\stunAbility.cpp" />
     <ClCompile Include="src\character\private\character.cpp" />
     <ClCompile Include="src\misc\private\consoleUtil.cpp" />
     <ClCompile Include="src\game\private\game.cpp" />
@@ -156,7 +160,11 @@
   <ItemGroup>
     <ClInclude Include="lib\json\dist\json\json-forwards.h" />
     <ClInclude Include="lib\json\dist\json\json.h" />
-    <ClInclude Include="src\character\public\characterAbility.h" />
+    <ClInclude Include="src\ability\core\public\ability.h" />
+    <ClInclude Include="src\ability\core\public\abilityTargetCharacteristics.h" />
+    <ClInclude Include="src\ability\core\public\health.h" />
+    <ClInclude Include="src\ability\public\chargeAbility.h" />
+    <ClInclude Include="src\ability\public\stunAbility.h" />
     <ClInclude Include="src\character\public\character.h" />
     <ClInclude Include="src\misc\public\consoleUtil.h" />
     <ClInclude Include="src\misc\public\constants.h" />

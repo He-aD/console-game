@@ -1,0 +1,8 @@
+{
+    "common": {
+        "cooldown": 5,
+        "probabilityOfSuccess": 20,
+        "message":  "weapon hit harder than usual and stun"
+    },
+    "duration": 1
+}

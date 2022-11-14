@@ -39,7 +39,19 @@
     <ClCompile Include="lib\json\dist\jsoncpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\character\private\characterAbility.cpp">
+    <ClCompile Include="src\ability\core\private\ability.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ability\core\private\health.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ability\core\private\abilityTargetCharacteristics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ability\private\chargeAbility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ability\private\stunAbility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,7 +83,19 @@
     <ClInclude Include="lib\json\dist\json\json-forwards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\character\public\characterAbility.h">
+    <ClInclude Include="src\ability\core\public\ability.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ability\core\public\health.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ability\core\public\abilityTargetCharacteristics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ability\public\chargeAbility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ability\public\stunAbility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

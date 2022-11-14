@@ -16,10 +16,10 @@ public:
 
 protected:
 	// fetch all characters inside characterDatas folder and store their name as reference of available character to play
-	void fectchAllCharactersName();
-	// fetch json data of a specific character
-	const Json::Value fetchCharacterData(const std::string& characterName);
+	void fectchAllCharactersLabel();
+	// hydrate json data of a specific character
+	const bool hydrateCharacterData(characterData& data, const std::string& characterLabel);
 
-	std::vector<std::string> charactersName;
+	std::vector<std::string> charactersLabel;
 	consoleUtil console;
 };

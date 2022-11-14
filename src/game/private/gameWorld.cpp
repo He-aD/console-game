@@ -5,7 +5,7 @@ gameWorld gameWorld::make(const std::array<characterData, constants::nbPlayers> 
 	sharedCharacter characters[constants::nbPlayers];
 
 	for (unsigned short i = 0; i < constants::nbPlayers; i++) {
-		characters[i] = std::make_shared<character>(
+		characters[i] = std::move(
 			character::make(datas[i]));
 	}
 
@@ -35,8 +35,8 @@ const gameWorld::gameState gameWorld::start() {
 			this->renderer.doPlayerUseAbility(i);
 		}
 
-		this->characters[0]->health.takeDamage(this->characters[1]->attackPower);
-		this->characters[1]->health.takeDamage(this->characters[0]->attackPower);
+		this->characters[0]->characteristics.health.takeDamage(this->characters[1]->characteristics.attackPower);
+		this->characters[1]->characteristics.health.takeDamage(this->characters[0]->characteristics.attackPower);
 
 		this->testGameEnd();
 
@@ -47,13 +47,14 @@ const gameWorld::gameState gameWorld::start() {
 }
 
 void gameWorld::testGameEnd() {
-	if (this->characters[0]->health.getAmount() == 0 && this->characters[1]->health.getAmount() == 0) {
+	if (this->characters[0]->characteristics.health.getAmount() == 0 && 
+		this->characters[1]->characteristics.health.getAmount() == 0) {
 		this->state = gameState::draw;
 	}
-	else if (this->characters[0]->health.getAmount() == 0) {
+	else if (this->characters[0]->characteristics.health.getAmount() == 0) {
 		this->state = gameState::player2Win;
 	}
-	else if (this->characters[1]->health.getAmount() == 0) {
+	else if (this->characters[1]->characteristics.health.getAmount() == 0) {
 		this->state = gameState::player1Win;
 	}
 }

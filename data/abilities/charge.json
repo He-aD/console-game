@@ -1,0 +1,9 @@
+{
+    "common": {
+        "cooldown": 3,
+        "probabilityOfSuccess": 60,
+        "message": "concentrate all his power to hit twice as hard"
+    },
+    "damageMultiplier": 2,
+    "duration": 1
+}

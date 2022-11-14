@@ -9,7 +9,7 @@ gameMenu::gameMenu() {
 	this->console.renderTextXCentered("### Welcome to Tristan's Job Interview Game! ###");
 	this->console.cursorCoordinate.Y += 2;
 
-	this->fectchAllCharactersName();
+	this->fectchAllCharactersLabel();
 }
 
 gameMenu::~gameMenu() {
@@ -27,7 +27,7 @@ const std::array<characterData, constants::nbPlayers> gameMenu::gatherPlayerChar
 	for (i = 0; i < constants::nbPlayers; i++) {
 		// display characters name and ask for choice
 		oss << "Player " << i + 1 << " please choose your character. Press ";
-		for (auto& name : this->charactersName) {
+		for (auto& name : this->charactersLabel) {
 			oss << name[0] << " for " << name << ", ";
 		}
 		oss.seekp(oss.str().length() - 2);
@@ -39,17 +39,17 @@ const std::array<characterData, constants::nbPlayers> gameMenu::gatherPlayerChar
 		std::transform(tmp.begin(), tmp.end(), tmp.begin(),
 			[](unsigned char c) {return std::tolower(c); });
 		find = false;
-		for (auto& name : this->charactersName) {
-			if (*tmp.c_str() == name[0]) {
-				// fetch character data from json
-				characterDatas[i].hydrateFromJson(this->fetchCharacterData(name));
+		for (auto& label : this->charactersLabel) {
+			if (*tmp.c_str() == label[0]) {
+				// hydrate character data from json
+				this->hydrateCharacterData(characterDatas[i], label);
 
 				// display player character's selection
 				oss << "Player " << i + 1 << " choose a";
-				if (constants::vowels.find(name[0]) != std::string::npos) {
+				if (constants::vowels.find(label[0]) != std::string::npos) {
 					oss << "n";
 				}
-				oss << " " << name << "!";
+				oss << " " << label << "!";
 				this->console.renderTextXCentered(oss);
 
 				find = true;
@@ -75,25 +75,32 @@ const std::array<characterData, constants::nbPlayers> gameMenu::gatherPlayerChar
 	return characterDatas;
 }
 
-void gameMenu::fectchAllCharactersName() {
+void gameMenu::fectchAllCharactersLabel() {
 	namespace fs = std::filesystem;
 	std::string tmp;
 
 	for (auto& p : fs::directory_iterator(constants::characterDatasPath)) {
 		tmp = p.path().u8string();
 		tmp.erase(0, strlen(constants::characterDatasPath));
-		tmp.erase(tmp.find(constants::characterDatasExtension), strlen(constants::characterDatasExtension));
+		tmp.erase(tmp.find(constants::dataExtension), strlen(constants::dataExtension));
 
-		this->charactersName.push_back(tmp);
+		this->charactersLabel.push_back(tmp);
 	}
 }
 
-const Json::Value gameMenu::fetchCharacterData(const std::string& characterName) {
-	const std::string& filePath = constants::characterDatasPath + characterName + constants::characterDatasExtension;
+const bool gameMenu::hydrateCharacterData(characterData& data, const std::string& characterLabel) {
+	const std::string& filePath = constants::characterDatasPath + characterLabel + constants::dataExtension;
 	Json::Value json;
 	std::ifstream ifs{ filePath };
-	ifs >> json;
 
-	return json;
+	try {
+		ifs >> json;
+		data.hydrateFromJson(json);
+
+		return true;
+	}
+	catch (const Json::RuntimeError) {
+		return false;
+	}
 }
 
