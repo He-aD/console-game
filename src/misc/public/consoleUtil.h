@@ -16,7 +16,7 @@ public:
 	void clearX(const unsigned short nbCharacters);
 
 	// set console size for nice game rendering
-	static void setSize();
+	void setSize();
 
 	// shorter function for readability
 	void setCursorPosition() { SetConsoleCursorPosition(this->consoleHandle, this->cursorCoordinate); }

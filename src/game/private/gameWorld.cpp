@@ -1,5 +1,6 @@
 #include "gameWorld.h"
 #include <utility>
+#include "game.h"
 
 gameWorld::gameWorld(const std::array<character::data, constants::nbPlayers> datas) {
 	this->state = gameState::waitToStart;
@@ -17,7 +18,7 @@ gameWorld::gameWorld(const std::array<character::data, constants::nbPlayers> dat
 	this->renderer = std::make_unique<gameRenderer>(this->characters);
 }
 
-const gameWorld::gameState gameWorld::start() {
+const gameEndAction gameWorld::start() {
 	this->renderer->askPlayerReady();
 	this->state = gameState::inProgress;
 
@@ -47,7 +48,8 @@ const gameWorld::gameState gameWorld::start() {
 		this->testGameEnd();
 	} while (this->state == gameState::inProgress);
 
-	return this->state;
+	// render end screen and ask for: remake, back to menu or quit
+	return this->renderer->renderEndScreen(*this);
 }
 
 void gameWorld::testGameEnd() {
@@ -61,10 +63,5 @@ void gameWorld::testGameEnd() {
 	}
 	else if (this->characters[1]->getCharacteristics().health.getAmount() == 0) {
 		this->state = gameState::player1Win;
-	}
-
-	// render end screen and ask for: remake, back to menu or quit
-	if (this->state != gameState::inProgress) {
-		
 	}
 }

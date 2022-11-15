@@ -4,6 +4,7 @@
 #include "gameWorld.h"
 #include <conio.h>
 #include <algorithm>
+#include "game.h"
 
 gameRenderer::gameRenderer(sharedCharacter inCharacters[constants::nbPlayers]) {
 	this->rightArtWidth = 0;
@@ -12,6 +13,10 @@ gameRenderer::gameRenderer(sharedCharacter inCharacters[constants::nbPlayers]) {
 	for (unsigned short i = 0; i < constants::nbPlayers; i++) {
 		this->characters[i] = inCharacters[i];
 	}
+}
+
+gameRenderer::~gameRenderer() {
+	this->console.clearConsole();
 }
 
 void gameRenderer::askPlayerReady() {
@@ -67,6 +72,54 @@ void gameRenderer::render(const gameWorld& world) {
 	for (auto& character : this->characters) {
 		this->renderCharactersHealthBar(character);
 		this->renderCharacterAbility(character);
+	}
+}
+
+const gameEndAction gameRenderer::renderEndScreen(const gameWorld& world) {
+	std::ostringstream oss;
+	std::string tmp;
+
+	// refresh health bar
+	for (auto& character : this->characters) {
+		this->renderCharactersHealthBar(character);
+	}
+
+	// display winner
+	const unsigned short winnerIndex = (unsigned short)world.getState();
+	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
+	if (winnerIndex < constants::nbPlayers) {
+		oss << "PLAYER " << winnerIndex + 1 << " AS " << this->characters[winnerIndex]->name << " IS THE WINNER!";
+	}
+	else {
+		oss << "DRAW!";
+	}	
+	this->console.renderTextXCentered(oss);
+	this->console.cursorCoordinate.Y++;
+
+askInput: // ask player what he wants to do
+	oss << "If you want to remake press: r, make a new game: n, to quit: q ";
+	this->console.renderTextXCentered(oss);
+	tmp = _getch();
+
+	// analyse player input and ask again if unknown
+	std::transform(tmp.begin(), tmp.end(), tmp.begin(),
+		[](unsigned char c) {return std::tolower(c); });
+	if (tmp.find("r") == std::string::npos && tmp.find("n") == std::string::npos && 
+		tmp.find("q") == std::string::npos) {
+		oss << "Oops, wrong input. ";
+
+		goto askInput;
+	}
+
+	// return enum
+	if (tmp.find("r") != std::string::npos) {
+		return gameEndAction::remake;
+	}
+	else if (tmp.find("n") != std::string::npos) {
+		return gameEndAction::newGame;
+	}
+	else {
+		return gameEndAction::quit;
 	}
 }
 

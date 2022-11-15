@@ -7,6 +7,8 @@
 #include "delegate.h"
 #include "gameMaster.h"
 
+enum class gameEndAction;
+
 // hold game loop and instanciates game classes (renderer, characters etc.)
 class gameWorld final {
 public:
@@ -21,7 +23,7 @@ public:
 	gameWorld(const std::array<character::data, constants::nbPlayers> datas);
 
 	// start the game and return the result
-	const gameState start();
+	const gameEndAction start();
 
 	// delegate fired every new turn in loop
 	delegate<void, const unsigned short> newTurnDelegate;

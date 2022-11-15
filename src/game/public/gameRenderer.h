@@ -5,15 +5,23 @@
 #include "constants.h"
 #include "consoleUtil.h"
 
+
 class gameWorld;
+enum class gameEndAction;
 
 // render everything during actual game combat and gather player input every turn
 class gameRenderer {
 public:
 	gameRenderer(sharedCharacter inCharacters[constants::nbPlayers]);
 
+	// clear console
+	~gameRenderer();
+
 	// main render function called by game loop every turn
 	void render(const gameWorld& world);
+
+	// render function called when combat end ask and return player whish to quit, remake or new game
+	const gameEndAction renderEndScreen(const gameWorld& world);
 
 	// return true if playerIndex use his character special ability
 	const bool doPlayerUseAbility(const unsigned short playerIndex);
