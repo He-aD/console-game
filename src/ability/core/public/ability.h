@@ -23,7 +23,7 @@ public: // construct
 		unsigned short cooldown;
 	};
 
-	abilityBase(const abilityBase::data& data, const std::string inName, gameWorld& inWorld, 
+	abilityBase(const abilityBase::data& data, const std::string& inName, gameWorld& inWorld, 
 		std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristics);
 
 public: // called by external classes to process ability logic. Call _process implemented by actual ability

@@ -6,7 +6,7 @@
 #include "gameWorld.h"
 #include <random>
 
-abilityBase::abilityBase(const abilityBase::data& data, const std::string inName, gameWorld& inWorld,
+abilityBase::abilityBase(const abilityBase::data& data, const std::string& inName, gameWorld& inWorld,
 	std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristics)
 	: probabilityOfSuccess(data.probabilityOfSuccess)
 	, message(data.message)
@@ -57,9 +57,10 @@ const bool abilityBase::doCastSucceed() {
 std::unique_ptr<abilityBase> abilityFactory::make(const char* abilityName, gameWorld& world,
 	std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristic) {
 	abilityBase::data data{};
-	
+	const std::string name{ abilityName };
+		
 	// try to read ability json data file
-	const std::string& filePath = constants::abilityDatasPath + std::string(abilityName) + constants::dataExtension;
+	const std::string& filePath = constants::abilityDatasPath + name + constants::dataExtension;
 	Json::Value json;
 	std::ifstream ifs{ filePath };
 	try {
@@ -72,14 +73,14 @@ std::unique_ptr<abilityBase> abilityFactory::make(const char* abilityName, gameW
 
 	// instanciate proper ability
 	if (strcmp(abilityName, "charge") == 0) {
-		return std::make_unique<chargeAbility>(std::move(data), world, std::move(inOwnerCharacteristic));
+		return std::make_unique<chargeAbility>(std::move(data), name, world, std::move(inOwnerCharacteristic));
 	}
 	else if (strcmp(abilityName, "stun") == 0) {
-		return std::make_unique<stunAbility>(std::move(data), world, std::move(inOwnerCharacteristic));
+		return std::make_unique<stunAbility>(std::move(data), name, world, std::move(inOwnerCharacteristic));
 	}
 
 notFound:
-	return std::make_unique<chargeAbility>(std::move(data), world, std::move(inOwnerCharacteristic));
+	return std::make_unique<chargeAbility>(std::move(data), name, world, std::move(inOwnerCharacteristic));
 }
 
 //////////////////////// DATA ////////////////////////////////////

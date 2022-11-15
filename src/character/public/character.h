@@ -20,7 +20,7 @@ public: // factory
 		std::string asciiArtPath;
 		std::string name;
 		std::string abilityName;
-		abilityTargetCharacteristicsData characteristicData;
+		abilityTargetCharacteristics::data characteristicData;
 	};
 
 	static std::shared_ptr<character> make(const data& data, gameWorld& world);

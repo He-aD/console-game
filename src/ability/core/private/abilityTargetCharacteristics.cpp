@@ -8,7 +8,7 @@ abilityTargetCharacteristics::abilityTargetCharacteristics(const abilityTargetCh
 
 //////////////////////// DATA ////////////////////////////////////
 
-void abilityTargetCharacteristicsData::hydrateFromJson(const Json::Value& json) {
+void abilityTargetCharacteristics::data::hydrateFromJson(const Json::Value& json) {
 	this->healthBase = json["healthBase"].asUInt();
 	this->healthShield = json["healthShield"].asUInt();
 	this->attackPower = json["attackPower"].asUInt();
