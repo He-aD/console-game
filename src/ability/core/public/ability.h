@@ -25,7 +25,7 @@ public:
 	abilityBase(const abilityData& data, const std::string inName, gameWorld& inWorld, 
 		std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristics);
 
-	virtual const bool process(abilityTargetCharacteristics& characteristics) = 0;
+	const bool process(abilityTargetCharacteristics& characteristics);
 
 	const unsigned short getNbTurnToBeAvailable() const { return this->nbTurnToBeAvailable; }
 
@@ -35,6 +35,8 @@ public:
 	const std::string name;
 
 protected:
+	virtual void _process(abilityTargetCharacteristics& characteristics) = 0;
+
 	void startCooldown();
 	void onNewTurn(const unsigned short turn);
 	const bool doCastSucceed();

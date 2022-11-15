@@ -21,6 +21,17 @@ abilityBase::abilityBase(const abilityData& data, const std::string inName, game
 		std::placeholders::_1));
 }
 
+const bool abilityBase::process(abilityTargetCharacteristics& characteristics) {
+	if (this->doCastSucceed() && this->getNbTurnToBeAvailable() == 0) {
+		this->_process(characteristics);
+		this->startCooldown();
+
+		return true;
+	}
+
+	return false;
+}
+
 void abilityBase::startCooldown() {
 	this->nbTurnToBeAvailable = this->cooldown + 1;
 }

@@ -7,13 +7,6 @@ chargeAbility::chargeAbility(const abilityData& data, gameWorld& world,
 	
 }
 
-const bool chargeAbility::process(abilityTargetCharacteristics& characteristics) {
-	if (this->doCastSucceed() && this->getNbTurnToBeAvailable() == 0) {
-		this->world->getMaster().increaseAttackPower(*this->ownerCharacteristics, 2);
-		this->startCooldown();
-
-		return true;
-	}
-
-	return false;
+void chargeAbility::_process(abilityTargetCharacteristics& characteristics) {
+	this->world->getMaster().increaseAttackPower(*this->ownerCharacteristics, 2);
 }

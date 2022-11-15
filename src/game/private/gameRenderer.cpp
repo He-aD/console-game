@@ -119,7 +119,7 @@ void gameRenderer::renderCharactersArt() {
 		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::asciiArt);
 		this->AlignCursorToCharacter(character);
 		for (std::string line : lines) {
-			this->console.SetCursorPosition();
+			this->console.setCursorPosition();
 			std::cout << line << std::endl;
 			this->console.cursorCoordinate.Y++;
 		}
@@ -176,10 +176,10 @@ void gameRenderer::AlignCursorToCharacter(constSharedCharacter character) {
 
 void gameRenderer::AlignCursorToLeftCharacter() {
 	this->console.cursorCoordinate.X = this->characterPadding;
-	this->console.SetCursorPosition();
+	this->console.setCursorPosition();
 }
 
 void gameRenderer::AlignCursorToRightCharacter() {
 	this->console.cursorCoordinate.X = this->console.consoleInfo.dwSize.X - (this->rightArtWidth + this->characterPadding);
-	this->console.SetCursorPosition();
+	this->console.setCursorPosition();
 }

@@ -1,7 +1,10 @@
 #include "consoleUtil.h"
 #include <iostream>
+#include "constants.h"
 
 consoleUtil::consoleUtil() {
+    this->setSize();
+
 	this->consoleHandle = nullptr;
 	this->cursorCoordinate.X = 0;
 	this->cursorCoordinate.Y = 0;
@@ -16,7 +19,7 @@ const std::string consoleUtil::renderTextXCentered(const char* inText, const boo
 
 	this->cursorCoordinate.X = xOffset;
 
-	this->SetCursorPosition();
+	this->setCursorPosition();
 	std::cout << inText;
 
 	if (gatherInput) {
@@ -64,9 +67,20 @@ void consoleUtil::clearConsole() {
 }
 
 void consoleUtil::clearX(const unsigned short nbCharacters) {
-    this->SetCursorPosition();
+    this->setCursorPosition();
 
     for (unsigned short i = 0; i < nbCharacters; i++) {
         std::cout << " ";
     }
+}
+
+void consoleUtil::setSize() {
+    HWND hwnd = GetConsoleWindow();
+
+    MoveWindow(hwnd, 
+        constants::consolePosition.x, 
+        constants::consolePosition.y,
+        constants::consolePosition.width,
+        constants::consolePosition.height,
+        TRUE);
 }

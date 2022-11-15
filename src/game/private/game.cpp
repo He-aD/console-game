@@ -1,6 +1,9 @@
 #include "game.h"
+#include "consoleUtil.h"
 
 game::game() {
+	consoleUtil::setSize();
+
 	gameWorld world{ std::move(this->menu()) };
 
 	world.start();

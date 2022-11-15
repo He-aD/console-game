@@ -7,13 +7,6 @@ stunAbility::stunAbility(const abilityData& data, gameWorld& world,
 	
 }
 
-const bool stunAbility::process(abilityTargetCharacteristics& characteristics) {
-	if (this->doCastSucceed() && this->getNbTurnToBeAvailable() == 0) {
+void stunAbility::_process(abilityTargetCharacteristics& characteristics) {
 		this->world->getMaster().stun(characteristics);
-		this->startCooldown();
-
-		return true;
-	}
-	
-	return false;
 }
