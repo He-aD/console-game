@@ -3,29 +3,32 @@
 #include "constants.h"
 
 consoleUtil::consoleUtil() {
-    this->setSize();
-
 	this->consoleHandle = nullptr;
 	this->cursorCoordinate.X = 0;
 	this->cursorCoordinate.Y = 0;
 
+    // hydrate console ptrs
 	this->consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	GetConsoleScreenBufferInfo(this->consoleHandle, &this->consoleInfo);
 }
 
 const std::string consoleUtil::renderTextXCentered(const char* inText, const bool gatherInput) {
 	std::string input;
-	const unsigned short xOffset = (this->consoleInfo.dwSize.X - (short)strlen(inText)) / 2;
 
+    // calculate cursor x offset from inText to be centered
+	const unsigned short xOffset = (this->consoleInfo.dwSize.X - (short)strlen(inText)) / 2;
 	this->cursorCoordinate.X = xOffset;
 
+    // set cursor position and render
 	this->setCursorPosition();
 	std::cout << inText;
 
+    // gather input if asked
 	if (gatherInput) {
 		std::cin >> input;
 	}
 
+    // return eventual input
 	return input;
 }
 

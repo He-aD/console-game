@@ -6,19 +6,21 @@
 #include <array>
 #include <vector>
 
+// render main menu before game combat and recover players characters selection and configuration
 class gameMenu {
 public:
 	gameMenu();
 	~gameMenu();
 
 	// ask for each player to select and name their character. Then return selected charcarter with data
-	const std::array<characterData, constants::nbPlayers> gatherPlayerCharacterData();
+	const std::array<character::data, constants::nbPlayers> gatherPlayerCharacterData();
 
 protected:
-	// fetch all characters inside characterDatas folder and store their name as reference of available character to play
+	// fetch all files inside character's data folder and store their name as reference of available character to play
 	void fectchAllCharactersLabel();
+
 	// hydrate json data of a specific character
-	const bool hydrateCharacterData(characterData& data, const std::string& characterLabel);
+	const bool hydrateCharacterData(character::data& data, const std::string& characterLabel);
 
 	std::vector<std::string> charactersLabel;
 	consoleUtil console;

@@ -28,17 +28,19 @@ const bool gameRenderer::doPlayerUseAbility(const unsigned short playerIndex) {
 	std::string tmp;
 	unsigned short lineLength = 0;
 
+	// display which player input now
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
 	oss << "PLAYER " << playerIndex + 1 << " PLAY";
 	this->console.renderTextXCentered(oss);
 	this->console.cursorCoordinate.Y++;
 
-askInput:
+askInput: // ask if player use his ability this turn
 	oss << this->characters[playerIndex]->name << " do you use your ability this turn? y: yes | n: no";
 	lineLength = (unsigned short)oss.str().length();
 	this->console.renderTextXCentered(oss);
-	
 	tmp = _getch();
+	
+	// analyse player input and ask again if unknown
 	std::transform(tmp.begin(), tmp.end(), tmp.begin(),
 		[](unsigned char c) {return std::tolower(c); });
 	if (tmp.find("y") == std::string::npos && tmp.find("n") == std::string::npos) {
@@ -47,6 +49,7 @@ askInput:
 		goto askInput;
 	}
 
+	// remove written text
 	this->console.clearX(lineLength);
 	this->console.cursorCoordinate.Y--;
 	this->console.clearX(lineLength);
@@ -84,13 +87,10 @@ void gameRenderer::renderTitle() {
 void gameRenderer::renderCharactersName() {
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::name);
 
-	// render player1 name
-	this->AlignCursorToLeftCharacter();
-	std::cout << this->characters[0]->name << std::endl;
-
-	// render player2 name at console extreme right 
-	this->AlignCursorToRightCharacter();
-	std::cout << this->characters[1]->name << std::endl;
+	for (auto& character : this->characters) {
+		this->AlignCursorToCharacter(character);
+		std::cout << character->name << std::endl;
+	}
 }
 
 void gameRenderer::renderCharactersArt() {
@@ -99,8 +99,9 @@ void gameRenderer::renderCharactersArt() {
 	const std::string delimiter{ "\n" };
 	std::vector<std::string> lines;
 
-	// calculate player art width and store each art's line in a vector and render
+	// calculate character art width and store each art's line in a vector and render
 	for (auto& character : this->characters) {
+		// calculate character art width and store each line in a vector
 		s = character->asciiArt;
 		lines.clear();
 		while ((pos = s.find(delimiter)) != std::string::npos) {
@@ -111,11 +112,13 @@ void gameRenderer::renderCharactersArt() {
 			s.erase(0, pos + delimiter.length());
 		}
 
+		// last character art's line
 		if (s.length() > this->rightArtWidth && this->console.cursorCoordinate.X > this->characterPadding) {
 			this->rightArtWidth = (unsigned short)pos;
 		}
 		lines.push_back(s);
 
+		// render character
 		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::asciiArt);
 		this->AlignCursorToCharacter(character);
 		for (std::string line : lines) {
@@ -126,14 +129,16 @@ void gameRenderer::renderCharactersArt() {
 	}
 }
 
-void gameRenderer::renderCharactersHealthBar(constSharedCharacter character) {
+void gameRenderer::renderCharactersHealthBar(constSharedCharacter& character) {
 	constexpr unsigned short maxWidth = 17;
 
+	// remove previous health bar
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::healthBar);
 	this->AlignCursorToCharacter(character);
 	this->console.clearX(maxWidth);
-	this->AlignCursorToCharacter(character);
 
+	// build new health bar
+	this->AlignCursorToCharacter(character);
 	std::string healthBar{ "[HP: " };
 	healthBar += std::to_string(character->getCharacteristics().health.getBase());
 	if (character->getCharacteristics().health.getShield() > 0) {
@@ -141,24 +146,28 @@ void gameRenderer::renderCharactersHealthBar(constSharedCharacter character) {
 	}
 	healthBar.append("]");
 
+	// render health bar
 	std::cout << healthBar;
 }
 
-void gameRenderer::renderCharacterAbility(constSharedCharacter character) {
+void gameRenderer::renderCharacterAbility(constSharedCharacter& character) {
 	constexpr unsigned short maxWidth = 32;
+
+	// remove previous ability text
+	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::ability);
+	this->AlignCursorToCharacter(character);
+	this->console.clearX(maxWidth);
+	
+	// build new ability text
+	this->AlignCursorToCharacter(character);
 	std::ostringstream oss; 
 	const abilityBase& ability = character->getAbility();
-
 	oss << ability.name << " available ";
 	if (ability.getNbTurnToBeAvailable() > 0) {
 		oss << "in " << ability.getNbTurnToBeAvailable() << " turn";
 	}
 
-	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::ability);
-	this->AlignCursorToCharacter(character);
-	this->console.clearX(maxWidth);
-	this->AlignCursorToCharacter(character);
-
+	// render ability text
 	std::cout << oss.str();
 }
 
@@ -170,7 +179,7 @@ void gameRenderer::renderTurn(const gameWorld& world) {
 	this->console.renderTextXCentered(oss);
 }
 
-void gameRenderer::AlignCursorToCharacter(constSharedCharacter character) {
+void gameRenderer::AlignCursorToCharacter(constSharedCharacter& character) {
 	this->characters[0] != character ? this->AlignCursorToRightCharacter() : this->AlignCursorToLeftCharacter();
 }
 

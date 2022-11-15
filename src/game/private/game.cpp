@@ -9,7 +9,7 @@ game::game() {
 	world.start();
 }
 
-std::array<characterData, constants::nbPlayers> game::menu() {
+std::array<character::data, constants::nbPlayers> game::menu() {
 	gameMenu menu;
 	
 	return menu.gatherPlayerCharacterData();

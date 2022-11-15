@@ -6,7 +6,7 @@
 #include "gameWorld.h"
 #include <random>
 
-abilityBase::abilityBase(const abilityData& data, const std::string inName, gameWorld& inWorld,
+abilityBase::abilityBase(const abilityBase::data& data, const std::string inName, gameWorld& inWorld,
 	std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristics)
 	: probabilityOfSuccess(data.probabilityOfSuccess)
 	, message(data.message)
@@ -15,6 +15,7 @@ abilityBase::abilityBase(const abilityData& data, const std::string inName, game
 	, world(&inWorld)
 	, ownerCharacteristics(inOwnerCharacteristics)
 	, nbTurnToBeAvailable(0) {
+
 	this->world->newTurnDelegate.add(std::bind(
 		&abilityBase::onNewTurn,
 		this,
@@ -22,7 +23,7 @@ abilityBase::abilityBase(const abilityData& data, const std::string inName, game
 }
 
 const bool abilityBase::process(abilityTargetCharacteristics& characteristics) {
-	if (this->doCastSucceed() && this->getNbTurnToBeAvailable() == 0) {
+	if (this->getNbTurnToBeAvailable() == 0 && this->doCastSucceed()) {
 		this->_process(characteristics);
 		this->startCooldown();
 
@@ -55,11 +56,12 @@ const bool abilityBase::doCastSucceed() {
 
 std::unique_ptr<abilityBase> abilityFactory::make(const char* abilityName, gameWorld& world,
 	std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristic) {
-	abilityData data{};
+	abilityBase::data data{};
+	
+	// try to read ability json data file
 	const std::string& filePath = constants::abilityDatasPath + std::string(abilityName) + constants::dataExtension;
 	Json::Value json;
 	std::ifstream ifs{ filePath };
-
 	try {
 		ifs >> json;
 		data.hydrateFromJson(json["common"]);
@@ -68,6 +70,7 @@ std::unique_ptr<abilityBase> abilityFactory::make(const char* abilityName, gameW
 		goto notFound;
 	}
 
+	// instanciate proper ability
 	if (strcmp(abilityName, "charge") == 0) {
 		return std::make_unique<chargeAbility>(std::move(data), world, std::move(inOwnerCharacteristic));
 	}
@@ -81,7 +84,7 @@ notFound:
 
 //////////////////////// DATA ////////////////////////////////////
 
-void abilityData::hydrateFromJson(const Json::Value& json) {
+void abilityBase::data::hydrateFromJson(const Json::Value& json) {
 	this->probabilityOfSuccess = json["probabilityOfSuccess"].asUInt();
 	this->message = json["message"].asString();
 	this->cooldown = json["cooldown"].asUInt();

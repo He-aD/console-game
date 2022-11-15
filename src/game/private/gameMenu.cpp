@@ -16,8 +16,8 @@ gameMenu::~gameMenu() {
 	this->console.clearConsole();
 }
 
-const std::array<characterData, constants::nbPlayers> gameMenu::gatherPlayerCharacterData() {
-	std::array<characterData, constants::nbPlayers> characterDatas{ characterData{}, characterData{} };
+const std::array<character::data, constants::nbPlayers> gameMenu::gatherPlayerCharacterData() {
+	std::array<character::data, constants::nbPlayers> characterDatas{ character::data{}, character::data{} };
 	unsigned short i{ 0 };
 	std::ostringstream oss;
 	std::string tmp;
@@ -88,7 +88,7 @@ void gameMenu::fectchAllCharactersLabel() {
 	}
 }
 
-const bool gameMenu::hydrateCharacterData(characterData& data, const std::string& characterLabel) {
+const bool gameMenu::hydrateCharacterData(character::data& data, const std::string& characterLabel) {
 	const std::string& filePath = constants::characterDatasPath + characterLabel + constants::dataExtension;
 	Json::Value json;
 	std::ifstream ifs{ filePath };

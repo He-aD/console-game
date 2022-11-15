@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 
+// console utils function used by renderers
 class consoleUtil {
 public:
 	consoleUtil();
@@ -11,16 +12,16 @@ public:
 	// remove all characters from the console
 	void clearConsole();
 
-	// clear nb of characters in parameter from cursor position 
+	// clear nb of characters in parameter from cursor position to console's right direction
 	void clearX(const unsigned short nbCharacters);
 
-	// set console size for proper render of the game
+	// set console size for nice game rendering
 	static void setSize();
 
 	// shorter function for readability
 	void setCursorPosition() { SetConsoleCursorPosition(this->consoleHandle, this->cursorCoordinate); }
 
-	// render text centered at cursorCoordinate.Y. Child classes are responsible to set cursorCoordinate.Y
+	// render text centered at cursorCoordinate.Y. Child classes are responsible to set cursorCoordinate.Y before calling
 	const std::string renderTextXCentered(const char* inText, const bool gatherInput = false);
 	const std::string renderTextXCentered(std::ostringstream& oss, const bool gatherInput = false);
 

@@ -7,30 +7,33 @@
 
 class gameWorld;
 
+// render everything during actual game combat and gather player input every turn
 class gameRenderer {
 public:
 	gameRenderer(sharedCharacter inCharacters[constants::nbPlayers]);
 
+	// main render function called by game loop every turn
 	void render(const gameWorld& world);
 
 	// return true if playerIndex use his character special ability
 	const bool doPlayerUseAbility(const unsigned short playerIndex);
 
+	// called before starting game loop
 	void askPlayerReady();
 
-protected:
-	void renderCharactersHealthBar(constSharedCharacter character);
-	void renderCharacterAbility(constSharedCharacter character);
+protected: // renders that might change every turn
+	void renderCharactersHealthBar(constSharedCharacter& character);
+	void renderCharacterAbility(constSharedCharacter& character);
 	void renderTurn(const gameWorld& world);
 
-protected:
+protected: // renders everything that don't change whole game
 	void renderStatics();
 	void renderTitle();
 	void renderCharactersName();
 	void renderCharactersArt();
 
-protected:
-	void AlignCursorToCharacter(constSharedCharacter character);
+protected: // helper to align console cursor to one of the characters
+	void AlignCursorToCharacter(constSharedCharacter& character);
 	void AlignCursorToRightCharacter();
 	void AlignCursorToLeftCharacter();
 

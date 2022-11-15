@@ -1,13 +1,7 @@
 #include "character.h"
 #include <fstream>
 
-void characterData::hydrateFromJson(const Json::Value& json) {
-	this->characteristicData.hydrateFromJson(json["abilityTargetCharacteristics"]);
-	this->asciiArtPath = json["asciiArtPath"].asString();
-	this->abilityName = json["abilityName"].asString();
-}
-
-std::shared_ptr<character> character::make(const characterData& data, gameWorld& world) {
+std::shared_ptr<character> character::make(const data& data, gameWorld& world) {
 	std::ifstream ifs{ data.asciiArtPath };
 
 	return std::shared_ptr<character>(new character(
@@ -23,6 +17,17 @@ character::character(std::shared_ptr<abilityTargetCharacteristics> inCharacteris
 	: characteristics(inCharacteristics)
 	, asciiArt(inAsciiArt)
 	, name(inName) {
-	this->ability = std::move(abilityFactory::make(abilityName.c_str(), world, this->characteristics));
+	
+	this->ability = std::move(
+		abilityFactory::make(abilityName.c_str(), world, this->characteristics)
+	);
+}
+
+//////////////////////// DATA ////////////////////////////////////
+
+void character::data::hydrateFromJson(const Json::Value& json) {
+	this->characteristicData.hydrateFromJson(json["abilityTargetCharacteristics"]);
+	this->asciiArtPath = json["asciiArtPath"].asString();
+	this->abilityName = json["abilityName"].asString();
 }
 

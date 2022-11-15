@@ -2,6 +2,8 @@
 
 #include "abilityTargetCharacteristics.h"
 
+// define all game unitary actions logic
+// mainly called by abilites process functions
 class gameMaster {
 public:
 	void increaseAttackPower(abilityTargetCharacteristics& target, const unsigned short multiplier) const;

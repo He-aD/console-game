@@ -1,6 +1,7 @@
 #include "health.h"
 
 const unsigned short healthContainer::takeDamage(unsigned short amount) {
+	// remove shield first
 	if (this->shield >= amount) {
 		this->shield -= amount;
 		amount = 0;
@@ -10,6 +11,7 @@ const unsigned short healthContainer::takeDamage(unsigned short amount) {
 		this->shield = 0;
 	}
 
+	// then remove base if shield didn't tank all the damage
 	if (this->base <= amount) {
 		this->base = 0;
 	}

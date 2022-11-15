@@ -1,7 +1,7 @@
 #include "gameWorld.h"
 #include <utility>
 
-gameWorld::gameWorld(const std::array<characterData, constants::nbPlayers> datas) {
+gameWorld::gameWorld(const std::array<character::data, constants::nbPlayers> datas) {
 	this->state = gameState::waitToStart;
 	this->turn = 0;
 
@@ -31,7 +31,7 @@ const gameWorld::gameState gameWorld::start() {
 
 		// if inputed by players execute their special abilities
 		for (unsigned short i = 0; i < constants::nbPlayers; i++) {
-			if (this->renderer->doPlayerUseAbility(i)) {
+			if (this->characters[i]->getAbility().getNbTurnToBeAvailable() == 0 && this->renderer->doPlayerUseAbility(i)) {
 				this->characters[i]->getAbility().process(
 					this->characters[(i + 1) % constants::nbPlayers]->getCharacteristics());
 			}
@@ -51,6 +51,7 @@ const gameWorld::gameState gameWorld::start() {
 }
 
 void gameWorld::testGameEnd() {
+	// check end conditions
 	if (this->characters[0]->getCharacteristics().health.getAmount() == 0 &&
 		this->characters[1]->getCharacteristics().health.getAmount() == 0) {
 		this->state = gameState::draw;
@@ -62,7 +63,7 @@ void gameWorld::testGameEnd() {
 		this->state = gameState::player1Win;
 	}
 
-	// render end screen and ask for remake, back to menu or quit
+	// render end screen and ask for: remake, back to menu or quit
 	if (this->state != gameState::inProgress) {
 		
 	}
