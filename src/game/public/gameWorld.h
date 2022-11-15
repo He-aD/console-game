@@ -9,7 +9,7 @@
 
 enum class gameEndAction;
 
-// hold game loop and instanciates game classes (renderer, characters etc.)
+// manage game loop and instanciates game classes (renderer, characters etc.)
 class gameWorld final {
 public:
 	enum class gameState { // represent current game state
