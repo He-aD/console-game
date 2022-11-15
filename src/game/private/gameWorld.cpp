@@ -28,24 +28,32 @@ const gameEndAction gameWorld::start() {
 		this->newTurnDelegate.broadcast(this->turn);
 
 		// render new turn
-		this->renderer->render(*this);
+		this->renderer->renderNewTurn(*this);
 
 		// if inputed by players execute their special abilities
 		for (unsigned short i = 0; i < constants::nbPlayers; i++) {
+			this->combatResults[i].reset();
+
 			if (this->characters[i]->getAbility().getNbTurnToBeAvailable() == 0 && this->renderer->doPlayerUseAbility(i)) {
-				this->characters[i]->getAbility().process(
+				this->combatResults[i].playerInputAbility = true;
+				this->combatResults[i].abilitySucceeded = this->characters[i]->getAbility().process(
 					this->characters[(i + 1) % constants::nbPlayers]->getCharacteristics());
 			}
 		}
 
 		// both characters try to make damage to each other
 		for (unsigned short i = 0; i < constants::nbPlayers; i++) {
-			this->master->tryMakeDamage(this->characters[i]->getCharacteristics(),
+			this->combatResults[i].attackSucceeded = this->master->tryMakeDamage(
+				this->characters[i]->getCharacteristics(),
 				this->characters[(i + 1) % constants::nbPlayers]->getCharacteristics());
 		}
 
 		// test end game condition
 		this->testGameEnd();
+
+		// render combat result
+		this->renderer->renderCombatResult(*this);
+
 	} while (this->state == gameState::inProgress);
 
 	// render end screen and ask for: remake, back to menu or quit
@@ -64,4 +72,15 @@ void gameWorld::testGameEnd() {
 	else if (this->characters[1]->getCharacteristics().health.getAmount() == 0) {
 		this->state = gameState::player1Win;
 	}
+}
+
+const gameWorld::combatResult& gameWorld::getCombatResults(const unsigned short index) const {
+	return this->combatResults[index % constants::nbPlayers]; 
+}
+//////////////////////// DATA ////////////////////////////////////
+
+void gameWorld::combatResult::reset() {
+	this->abilitySucceeded = false;
+	this->attackSucceeded = false;
+	this->playerInputAbility = false;
 }

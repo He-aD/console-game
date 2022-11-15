@@ -69,7 +69,7 @@ const std::array<character::data, constants::nbPlayers> gameMenu::gatherPlayerCh
 		// ask player to name its character
 		oss << "Player " << i + 1 << " please enter a name for your character: ";
 		characterDatas[i].name = this->console.renderTextXCentered(oss, true);
-		this->console.cursorCoordinate.Y++;
+		this->console.cursorCoordinate.Y += 2;
 	}
 
 	return characterDatas;

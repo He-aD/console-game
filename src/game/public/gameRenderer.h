@@ -17,8 +17,11 @@ public:
 	// clear console
 	~gameRenderer();
 
-	// main render function called by game loop every turn
-	void render(const gameWorld& world);
+	// main render function called by game loop beginning of every turn
+	void renderNewTurn(const gameWorld& world);
+
+	// render combat info called by game loop end of every turn
+	void renderCombatResult(const gameWorld& world);
 
 	// render function called when combat end ask and return player whish to quit, remake or new game
 	const gameEndAction renderEndScreen(const gameWorld& world);
@@ -47,10 +50,12 @@ protected: // helper to align console cursor to one of the characters
 
 protected:
 	enum class characterLineRendering {
-		title = 1,
+		title,
 		turn,
-		info = 5,
-		name = 9,
+		combatResult = 3,
+		playerInput,
+		info = 8,
+		name = 11,
 		healthBar,
 		ability,
 		asciiArt,
@@ -60,5 +65,5 @@ protected:
 	consoleUtil console;
 	constSharedCharacter characters[constants::nbPlayers];
 	unsigned short rightArtWidth;
-	const unsigned short characterPadding = 10;
+	const unsigned short characterPadding = 20;
 };

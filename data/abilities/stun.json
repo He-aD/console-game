@@ -2,6 +2,6 @@
     "common": {
         "cooldown": 5,
         "probabilityOfSuccess": 20,
-        "message":  "weapon hit harder than usual and stun"
+        "message":  "hit harder than usual with his weapon to stun"
     }
 }

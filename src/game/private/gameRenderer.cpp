@@ -31,16 +31,16 @@ void gameRenderer::askPlayerReady() {
 const bool gameRenderer::doPlayerUseAbility(const unsigned short playerIndex) {
 	std::ostringstream oss;
 	std::string tmp;
-	unsigned short lineLength = 0;
+	unsigned short lineLength{ 0 };
 
 	// display which player input now
-	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
+	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::playerInput);
 	oss << "PLAYER " << playerIndex + 1 << " PLAY";
 	this->console.renderTextXCentered(oss);
 	this->console.cursorCoordinate.Y++;
 
 askInput: // ask if player use his ability this turn
-	oss << this->characters[playerIndex]->name << " do you use your ability this turn? y: yes | n: no";
+	oss << "Do " << this->characters[playerIndex]->name << " use his ability this turn? y: yes | n: no";
 	lineLength = (unsigned short)oss.str().length();
 	this->console.renderTextXCentered(oss);
 	tmp = _getch();
@@ -62,7 +62,7 @@ askInput: // ask if player use his ability this turn
 	return tmp.find("y") != std::string::npos;
 }
 
-void gameRenderer::render(const gameWorld& world) {
+void gameRenderer::renderNewTurn(const gameWorld& world) {
 	if (world.getTurn() == 1) {
 		this->renderStatics();
 	}
@@ -72,6 +72,58 @@ void gameRenderer::render(const gameWorld& world) {
 	for (auto& character : this->characters) {
 		this->renderCharactersHealthBar(character);
 		this->renderCharacterAbility(character);
+	}
+
+	if (world.getTurn() > 1) {
+		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
+		this->console.renderTextXCentered("Press any key to play new turn...");
+		auto input = _getch();
+
+		// clear combat text render
+		this->console.cursorCoordinate.X = 0;
+		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::combatResult);
+		for (unsigned short i = 0; i < 6; i++) {
+			this->console.clearX(console.consoleInfo.dwSize.X);
+			this->console.cursorCoordinate.Y++;
+		}
+	}
+}
+
+void gameRenderer::renderCombatResult(const gameWorld& world) {
+	unsigned short i{ 0 };
+	std::ostringstream oss;
+
+	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::combatResult);
+	for (auto& character : this->characters) {
+		const gameWorld::combatResult& result = world.getCombatResults(i);
+
+		// text render if player try to used his ability
+		if (result.playerInputAbility) {
+			oss << character->name;
+
+			if (result.abilitySucceeded) {
+				oss << " successfully used " << character->getAbility().name;
+				oss << ", " << character->getAbility().message << "!";
+			}
+			else {
+				oss << " failed to use " << character->getAbility().name << ".";
+			}
+			this->console.renderTextXCentered(oss);
+			this->console.cursorCoordinate.Y++;
+		}		
+		
+		// text render anyway
+		oss << character->name;
+		if (result.attackSucceeded) {
+			oss << " attacked and made " << character->getCharacteristics().attackPower << " damage.";
+		}
+		else {
+			oss << " failed his attack because " << this->characters[(i + 1) % 2]->name << " prevent it!";
+		}
+		this->console.renderTextXCentered(oss);
+		this->console.cursorCoordinate.Y++;
+
+		i++;
 	}
 }
 
