@@ -15,13 +15,14 @@ public:
 	game();
 
 protected:
-	// start a new game if bool param is false display menu first to gather player's configuration
+	// start a new game. If bool param is false display menu first to gather player's configuration
 	void startNewGame(const bool useStoredGameData);
 
+	// display menu and return gathered player's configuration
 	std::array<character::data, constants::nbPlayers> menu();
 
 protected:
-	// keep a copy of game data for remake
+	// keep a copy of game data for eventual remake
 	std::array<character::data, constants::nbPlayers> charactersData;
 
 	consoleUtil console;

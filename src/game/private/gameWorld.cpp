@@ -61,16 +61,26 @@ const gameEndAction gameWorld::start() {
 }
 
 void gameWorld::testGameEnd() {
-	// check end conditions
-	if (this->characters[0]->getCharacteristics().health.getAmount() == 0 &&
-		this->characters[1]->getCharacteristics().health.getAmount() == 0) {
+	short healthNonEmptyIndex{ -1 }, i{ 0 };
+
+	// check character health to calculate end condition
+	for (auto& character : this->characters) {
+		if (character->getCharacteristics().health.getAmount() != 0 && healthNonEmptyIndex == -1) {
+			healthNonEmptyIndex = i;
+		}
+		else if (character->getCharacteristics().health.getAmount() != 0) { // more than one character is alive: no end condition
+			return;
+		}
+
+		i++;
+	}
+
+	// calculate proper end condition
+	if (healthNonEmptyIndex == -1) { // all characters are dead
 		this->state = gameState::draw;
 	}
-	else if (this->characters[0]->getCharacteristics().health.getAmount() == 0) {
-		this->state = gameState::player2Win;
-	}
-	else if (this->characters[1]->getCharacteristics().health.getAmount() == 0) {
-		this->state = gameState::player1Win;
+	else {
+		this->state = gameState(healthNonEmptyIndex);
 	}
 }
 

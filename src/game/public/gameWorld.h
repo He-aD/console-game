@@ -31,9 +31,10 @@ public:
 	};
 
 public:
+	// instaciates game master, renderer and characters
 	gameWorld(const std::array<character::data, constants::nbPlayers> datas);
 
-	// start the game and return the result
+	// start and manage game loop. On end return players end action
 	const gameEndAction start();
 
 	// delegate fired every new turn in loop

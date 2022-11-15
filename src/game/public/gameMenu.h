@@ -12,7 +12,7 @@ public:
 	gameMenu();
 	~gameMenu();
 
-	// ask for each player to select and name their character. Then return selected charcarter with data
+	// ask for each player to select and name their character. Then return selected character with data
 	const std::array<character::data, constants::nbPlayers> gatherPlayerCharacterData();
 
 protected:
