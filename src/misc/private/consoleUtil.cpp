@@ -30,7 +30,9 @@ const std::string consoleUtil::renderTextXCentered(const char* inText, const boo
             input = _getch();
         }
         else {
-            std::getline(std::cin, input);
+            while (input.empty()) {
+                std::getline(std::cin, input);
+            }
         }
 	}
 

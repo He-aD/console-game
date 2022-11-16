@@ -43,7 +43,7 @@ const gameEndPlayerChoice gameWorld::start() {
 
 		// both characters try to make damage to each other
 		for (unsigned short i = 0; i < constants::nbPlayers; i++) {
-			this->combatResults[i].attackSucceeded = this->master->tryMakeDamage(
+			this->combatResults[i].damageMade = this->master->tryMakeDamage(
 				this->characters[i]->getCharacteristics(),
 				this->characters[(i + 1) % constants::nbPlayers]->getCharacteristics());
 		}
@@ -89,8 +89,12 @@ const gameWorld::combatResult& gameWorld::getCombatResults(const unsigned short 
 }
 //////////////////////// DATA ////////////////////////////////////
 
+gameWorld::combatResult::combatResult() {
+	this->reset();
+}
+
 void gameWorld::combatResult::reset() {
 	this->abilitySucceeded = false;
-	this->attackSucceeded = false;
+	this->damageMade = 0;
 	this->playerInputAbility = false;
 }

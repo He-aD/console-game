@@ -8,12 +8,12 @@ void gameMaster::stun(abilityTargetCharacteristics& target) const {
 	target.stun = true;
 }
 
-const bool gameMaster::tryMakeDamage(const abilityTargetCharacteristics& source, abilityTargetCharacteristics& target) const {
+const unsigned short gameMaster::tryMakeDamage(const abilityTargetCharacteristics& source, abilityTargetCharacteristics& target) const {
 	if (!source.stun) {
 		target.health.takeDamage(source.attackPower);
 
-		return true;
+		return source.attackPower;
 	}
 
-	return false;
+	return 0;
 }

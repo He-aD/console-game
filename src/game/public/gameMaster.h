@@ -10,5 +10,6 @@ public:
 
 	void stun(abilityTargetCharacteristics& target) const;
 
-	const bool tryMakeDamage(const abilityTargetCharacteristics& source, abilityTargetCharacteristics& target) const;
+	// return damage made bv source to target
+	const unsigned short tryMakeDamage(const abilityTargetCharacteristics& source, abilityTargetCharacteristics& target) const;
 };

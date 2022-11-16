@@ -115,8 +115,8 @@ void gameRenderer::renderCombatResult(const gameWorld& world) {
 		
 		// combat text render anyway
 		oss << character->name;
-		if (result.attackSucceeded) {
-			oss << " attacked and made " << character->getCharacteristics().attackPower << " damage.";
+		if (result.damageMade > 0) {
+			oss << " attacked and made " << result.damageMade << " damage.";
 		}
 		else {
 			oss << " failed his attack because " << this->characters[(i + 1) % 2]->name << " prevent it!";
