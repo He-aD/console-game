@@ -19,9 +19,15 @@ gameWorld::gameWorld(const std::array<character::data, constants::nbPlayers> dat
 }
 
 const gameEndPlayerChoice gameWorld::start() {
+	// prepare character's characteristics array for dodge challenge
+	std::array<std::shared_ptr<abilityTargetCharacteristics>, constants::nbPlayers> characterCharacteristics;
+	for (unsigned short i{ 0 }; i < constants::nbPlayers; i++) {
+		characterCharacteristics[i] = std::move(this->characters[i]->getSharedCharacteristics());
+	}
+
+	// ask player ready and start loop
 	this->renderer->askPlayerReady();
 	this->state = gameState::inProgress;
-
 	do {
 		// new turn 
 		this->turn++;
@@ -41,9 +47,14 @@ const gameEndPlayerChoice gameWorld::start() {
 			}
 		}
 
+		// do dodge challenge
+		auto dodgeChallenges = this->master->generateDodgeChallenges(characterCharacteristics);
+		this->renderer->doDodgeChallenge(*this, dodgeChallenges);
+		this->master->applyDodgeChallengeBonus(dodgeChallenges);
+
 		// both characters try to make damage to each other
 		for (unsigned short i = 0; i < constants::nbPlayers; i++) {
-			this->combatResults[i].attackSucceeded = this->master->tryMakeDamage(
+			this->combatResults[i].damageMade = this->master->tryMakeDamage(
 				this->characters[i]->getCharacteristics(),
 				this->characters[(i + 1) % constants::nbPlayers]->getCharacteristics());
 		}
@@ -87,10 +98,11 @@ void gameWorld::testGameEnd() {
 const gameWorld::combatResult& gameWorld::getCombatResults(const unsigned short index) const {
 	return this->combatResults[index % constants::nbPlayers]; 
 }
+
 //////////////////////// DATA ////////////////////////////////////
 
 void gameWorld::combatResult::reset() {
 	this->abilitySucceeded = false;
-	this->attackSucceeded = false;
+	this->damageMade = 0;
 	this->playerInputAbility = false;
 }

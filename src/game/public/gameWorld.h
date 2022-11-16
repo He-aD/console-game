@@ -27,7 +27,7 @@ public:
 
 		bool playerInputAbility;
 		bool abilitySucceeded;
-		bool attackSucceeded;
+		unsigned short damageMade;
 	};
 
 public:

@@ -23,7 +23,7 @@ void gameRenderer::askPlayerReady() {
 	this->console.renderTextXCentered("Everything is ready. Prepare to fight!!\n");
 
 	this->console.cursorCoordinate.Y++;
-	auto input = this->console.renderTextXCentered("Press any key to start...", true, true);
+	this->console.renderTextXCentered("Press any key to start...", true, true);
 
 	this->console.clearConsole();
 }
@@ -78,7 +78,7 @@ void gameRenderer::render(const gameWorld& world) {
 		// ask player input before starting new turn: avoid automatic turn when no player can input
 		// and improve readability
 		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
-		auto input = this->console.renderTextXCentered("Press any key to play new turn...", true, true);
+		this->console.renderTextXCentered("Press any key to play new turn...", true, true);
 
 		// clear previous combat text rendered
 		this->console.cursorCoordinate.X = 0;
@@ -86,6 +86,69 @@ void gameRenderer::render(const gameWorld& world) {
 		for (unsigned short i = 0; i < 6; i++) {
 			this->console.clearX(console.consoleInfo.dwSize.X);
 			this->console.cursorCoordinate.Y++;
+		}
+	}
+}
+
+void gameRenderer::doDodgeChallenge(const gameWorld& world, std::vector<gameMaster::dodgeChallenge>& challenges) {
+	if (challenges.size() > 0) {
+		unsigned short i{ 0 }, winnerIndex{ 0 };
+		std::ostringstream oss;
+		std::string playerAnswer;
+		double minDuration{ -1 };
+
+		// display challenge title
+		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::playerInput);
+		oss << "Dodge challenge, difficulty: " << challenges[0].getDifficulty();
+		this->console.renderTextXCentered(oss);
+		this->console.cursorCoordinate.Y++;
+
+		// do challenge for each player
+		for (auto& challenge : challenges) {
+			// display ready go
+			oss << "PLAYER " << i + 1 << " press any key to start challenge...";
+			this->console.renderTextXCentered(oss, true, true);
+
+			// clear text and start challenge chrono
+			this->console.clearX(this->console.consoleInfo.dwSize.X);
+			challenge.start();
+
+		submitChallenge: // loop challenge until right answer
+			oss << challenge.text << " ";
+			playerAnswer = this->console.renderTextXCentered(oss, true);
+			if (!challenge.isCorrectAnswer(playerAnswer)) {
+				oss << "Wrong! Try again: ";
+				goto submitChallenge;
+			}
+
+			// refresh eventual winner
+			if (minDuration == -1 || minDuration > challenge.getDuration()) {
+				minDuration = challenge.getDuration();
+				winnerIndex = i;
+			}
+
+			// clear challenge and display player result
+			this->console.clearX(this->console.consoleInfo.dwSize.X);
+			oss << "PLAYER " << i + 1 << " find the solution in: " << challenge.getDuration() << "s. ";
+			this->console.renderTextXCentered(oss);
+
+			this->console.cursorCoordinate.Y++;
+			i++;
+		}
+
+		// display winner and his reward
+		oss << "PLAYER " << winnerIndex + 1 << " win the challenge! " << "His character will dodge ";
+		oss << world.getMaster().dodgeChallengeBonus[challenges[winnerIndex].difficulty] << "% of next damage.";
+		this->console.renderTextXCentered(oss);
+		
+		// wait input to continue
+		this->console.cursorCoordinate.Y++;
+		this->console.renderTextXCentered("Press any key to end turn...", true, true);
+
+		// clear challenges text
+		for (i = 0; i < 6; i++) {
+			this->console.clearX(this->console.consoleInfo.dwSize.X);
+			this->console.cursorCoordinate.Y--;
 		}
 	}
 }
@@ -115,8 +178,8 @@ void gameRenderer::renderCombatResult(const gameWorld& world) {
 		
 		// combat text render anyway
 		oss << character->name;
-		if (result.attackSucceeded) {
-			oss << " attacked and made " << character->getCharacteristics().attackPower << " damage.";
+		if (result.damageMade > 0) {
+			oss << " attacked and made " << result.damageMade << " damage.";
 		}
 		else {
 			oss << " failed his attack because " << this->characters[(i + 1) % 2]->name << " prevent it!";

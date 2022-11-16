@@ -65,4 +65,6 @@ public: // mutable attributes
 	variable<unsigned short> attackPower;
 
 	variable<bool> stun;
+
+	variable<float> dodgeFactor;
 };

@@ -4,7 +4,7 @@
 #include <memory>
 #include "constants.h"
 #include "consoleUtil.h"
-
+#include "gameMaster.h"
 
 class gameWorld;
 enum class gameEndPlayerChoice;
@@ -19,6 +19,9 @@ public:
 
 	// main render function called by game loop beginning of every turn
 	void render(const gameWorld& world);
+
+	// render dodge challenge called by game loop every turn
+	void doDodgeChallenge(const gameWorld& world, std::vector<gameMaster::dodgeChallenge>& challenges);
 
 	// render combat info called by game loop end of every turn
 	void renderCombatResult(const gameWorld& world);

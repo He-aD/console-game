@@ -4,7 +4,8 @@
 abilityTargetCharacteristics::abilityTargetCharacteristics(const abilityTargetCharacteristics::data& data, gameWorld& world)
 	: health(healthContainer(data.healthBase, data.healthShield))
 	, attackPower(variable<unsigned short>(data.attackPower, world.newTurnDelegate))
-	, stun(variable<bool>(false, world.newTurnDelegate)) {}
+	, stun(variable<bool>(false, world.newTurnDelegate))
+	, dodgeFactor(variable<float>(1.f, world.newTurnDelegate)) {}
 
 //////////////////////// DATA ////////////////////////////////////
 

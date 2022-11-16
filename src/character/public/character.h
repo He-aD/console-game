@@ -31,6 +31,7 @@ public: // getters
 
 	const abilityTargetCharacteristics& getCharacteristics() const { return *this->characteristics.get(); }
 	abilityTargetCharacteristics& getCharacteristics() { return *this->characteristics.get(); }
+	std::shared_ptr<abilityTargetCharacteristics> getSharedCharacteristics() { return this->characteristics; }
 	
 public: // const and public attributes
 	const std::string asciiArt;
