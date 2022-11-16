@@ -22,6 +22,7 @@ protected:
 	// hydrate json data of a specific character
 	const bool hydrateCharacterData(character::data& data, const std::string& characterLabel);
 
+	// store character available to play
 	std::vector<std::string> charactersLabel;
 	consoleUtil console;
 };

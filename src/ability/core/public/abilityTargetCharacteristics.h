@@ -25,7 +25,7 @@ public: // construct
 
 	abilityTargetCharacteristics(const abilityTargetCharacteristics::data& data, gameWorld& world);
 
-public: // mutable attributes type: define logic to mutate and then reset to default value
+public: // mutable attributes type: define logic to easily mutate and then reset to default value
 	template<typename T>
 	struct variable {
 		variable(const T& inDefaultValue, delegate<void, const unsigned short>& newTurnDelegate)

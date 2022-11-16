@@ -11,7 +11,7 @@ game::game() {
 }
 
 void game::startNewGame(const bool useStoredGameData) {
-	gameEndAction action;
+	gameEndPlayerChoice choice;
 
 	if (!useStoredGameData) {
 		this->charactersData = this->menu();
@@ -19,11 +19,11 @@ void game::startNewGame(const bool useStoredGameData) {
 
 	{ // force world out of scope
 		gameWorld world{ this->charactersData };
-		action = world.start();
+		choice = world.start();
 	}
 
-	if (action != gameEndAction::quit) {
-		this->startNewGame(action == gameEndAction::remake);
+	if (choice != gameEndPlayerChoice::quit) {
+		this->startNewGame(choice == gameEndPlayerChoice::remake);
 	}
 }
 

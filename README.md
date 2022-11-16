@@ -4,6 +4,7 @@ solution:
 
 - IDE: visual studio 2019
 - language standard: C++ 17
+- build with windows console API, won't work on linux
 
 external lib used:
 
@@ -20,5 +21,4 @@ git branches:
 - data: contain characters and abilities data json files
 - lib: external lib installed manually
 - src: all c++ source files (convention: *.h* in *public* folders, *.cpp* in *private* folders)
-- exe: game executable just in case there is a problem 
 

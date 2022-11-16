@@ -36,10 +36,10 @@ public: // getter
 	const unsigned short getNbTurnToBeAvailable() const { return this->nbTurnToBeAvailable; }
 
 protected: // cooldowns utils	
-	// test ability's probability
-	const bool doCastSucceed();
+	// test ability's probability return true if successfull
+	const bool cast();
 
-	// called when ability cast succeed
+	// start cooldown count
 	void startCooldown();
 
 	// bind to gameWorld new turn delegate: decrease nbTurnToBeAvailable every turn
@@ -53,6 +53,8 @@ public: // const attributes
 
 protected: // attributes
 	gameWorld* world;
+
+	// store a share of ability's owner characterstic for convenience. It avoids to pass it in process function
 	std::shared_ptr<abilityTargetCharacteristics> ownerCharacteristics;
 	unsigned short nbTurnToBeAvailable;
 };

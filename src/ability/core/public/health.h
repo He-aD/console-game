@@ -15,7 +15,7 @@ public: // getters
 	const unsigned short getBase() const { return this->base; }
 	const unsigned short getShield() const { return this->shield; }
 
-	// consider the base and shield as health. Indeed shield as no expiration time or different rules as base amount.
+	// consider the base and shield as health. Indeed shield as no expiration time or different rules.
 	const unsigned short getAmount() const { return this->base + this->shield; }
 
 protected: // attributes

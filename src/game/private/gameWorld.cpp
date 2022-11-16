@@ -18,7 +18,7 @@ gameWorld::gameWorld(const std::array<character::data, constants::nbPlayers> dat
 	this->renderer = std::make_unique<gameRenderer>(this->characters);
 }
 
-const gameEndAction gameWorld::start() {
+const gameEndPlayerChoice gameWorld::start() {
 	this->renderer->askPlayerReady();
 	this->state = gameState::inProgress;
 
@@ -28,7 +28,7 @@ const gameEndAction gameWorld::start() {
 		this->newTurnDelegate.broadcast(this->turn);
 
 		// render new turn
-		this->renderer->renderNewTurn(*this);
+		this->renderer->render(*this);
 
 		// if inputed by players execute their special abilities
 		for (unsigned short i = 0; i < constants::nbPlayers; i++) {

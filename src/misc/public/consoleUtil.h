@@ -22,8 +22,8 @@ public:
 	void setCursorPosition() { SetConsoleCursorPosition(this->consoleHandle, this->cursorCoordinate); }
 
 	// render text centered at cursorCoordinate.Y. Child classes are responsible to set cursorCoordinate.Y before calling
-	const std::string renderTextXCentered(const char* inText, const bool gatherInput = false);
-	const std::string renderTextXCentered(std::ostringstream& oss, const bool gatherInput = false);
+	const std::string renderTextXCentered(const char* inText, const bool gatherInput = false, const bool useGetch = false);
+	const std::string renderTextXCentered(std::ostringstream& oss, const bool gatherInput = false, const bool useGetch = false);
 
 	CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
 	HANDLE consoleHandle;

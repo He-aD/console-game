@@ -32,7 +32,7 @@ const std::array<character::data, constants::nbPlayers> gameMenu::gatherPlayerCh
 		}
 		oss.seekp(oss.str().length() - 2);
 		oss << ":";
-		tmp = this->console.renderTextXCentered(oss, true);
+		tmp = this->console.renderTextXCentered(oss, true, true);
 		this->console.cursorCoordinate.Y++;
 
 		// read player input and look for a match in characters name

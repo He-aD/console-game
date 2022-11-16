@@ -7,7 +7,7 @@
 
 
 class gameWorld;
-enum class gameEndAction;
+enum class gameEndPlayerChoice;
 
 // render everything during actual game combat and gather player input every turn
 class gameRenderer {
@@ -18,13 +18,13 @@ public:
 	~gameRenderer();
 
 	// main render function called by game loop beginning of every turn
-	void renderNewTurn(const gameWorld& world);
+	void render(const gameWorld& world);
 
 	// render combat info called by game loop end of every turn
 	void renderCombatResult(const gameWorld& world);
 
 	// render function called when combat end ask and return player whish to quit, remake or new game
-	const gameEndAction renderEndScreen(const gameWorld& world);
+	const gameEndPlayerChoice renderEndScreen(const gameWorld& world);
 
 	// return true if playerIndex use his character special ability
 	const bool doPlayerUseAbility(const unsigned short playerIndex);
@@ -35,7 +35,7 @@ public:
 protected: // renders that might change every turn
 	void renderCharactersHealthBar(constSharedCharacter& character);
 	void renderCharacterAbility(constSharedCharacter& character);
-	void renderTurn(const gameWorld& world);
+	void renderTurnTitle(const gameWorld& world);
 
 protected: // renders everything that don't change whole game
 	void renderStatics();
@@ -43,13 +43,13 @@ protected: // renders everything that don't change whole game
 	void renderCharactersName();
 	void renderCharactersArt();
 
-protected: // helper to align console cursor to one of the characters
+protected: // helpers to align console cursor to one of the UI characters
 	void AlignCursorToCharacter(constSharedCharacter& character);
 	void AlignCursorToRightCharacter();
 	void AlignCursorToLeftCharacter();
 
 protected:
-	enum class characterLineRendering {
+	enum class characterLineRendering { // console Y cursor position values regards to UI element
 		title,
 		turn,
 		combatResult = 3,
@@ -64,6 +64,8 @@ protected:
 
 	consoleUtil console;
 	constSharedCharacter characters[constants::nbPlayers];
-	unsigned short rightArtWidth;
 	const unsigned short characterPadding = 20;
+
+	// store UI right's character ascii art width to render it properly
+	unsigned short rightArtWidth;
 };

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include "gameWorld.h"
-#include <conio.h>
 #include <algorithm>
 #include "game.h"
 
@@ -20,17 +19,18 @@ gameRenderer::~gameRenderer() {
 }
 
 void gameRenderer::askPlayerReady() {
-	this->console.cursorCoordinate.Y += 3;
+	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::title);
 	this->console.renderTextXCentered("Everything is ready. Prepare to fight!!\n");
 
-	system("pause");
+	this->console.cursorCoordinate.Y++;
+	auto input = this->console.renderTextXCentered("Press any key to start...", true, true);
 
 	this->console.clearConsole();
 }
 
 const bool gameRenderer::doPlayerUseAbility(const unsigned short playerIndex) {
 	std::ostringstream oss;
-	std::string tmp;
+	std::string input;
 	unsigned short lineLength{ 0 };
 
 	// display which player input now
@@ -42,13 +42,12 @@ const bool gameRenderer::doPlayerUseAbility(const unsigned short playerIndex) {
 askInput: // ask if player use his ability this turn
 	oss << "Do " << this->characters[playerIndex]->name << " use his ability this turn? y: yes | n: no";
 	lineLength = (unsigned short)oss.str().length();
-	this->console.renderTextXCentered(oss);
-	tmp = _getch();
+	input = this->console.renderTextXCentered(oss, true, true);
 	
 	// analyse player input and ask again if unknown
-	std::transform(tmp.begin(), tmp.end(), tmp.begin(),
+	std::transform(input.begin(), input.end(), input.begin(),
 		[](unsigned char c) {return std::tolower(c); });
-	if (tmp.find("y") == std::string::npos && tmp.find("n") == std::string::npos) {
+	if (input.find("y") == std::string::npos && input.find("n") == std::string::npos) {
 		oss << "Oops, wrong input. ";
 
 		goto askInput;
@@ -59,27 +58,29 @@ askInput: // ask if player use his ability this turn
 	this->console.cursorCoordinate.Y--;
 	this->console.clearX(lineLength);
 
-	return tmp.find("y") != std::string::npos;
+	return input.find("y") != std::string::npos;
 }
 
-void gameRenderer::renderNewTurn(const gameWorld& world) {
+void gameRenderer::render(const gameWorld& world) {
 	if (world.getTurn() == 1) {
 		this->renderStatics();
 	}
 
-	this->renderTurn(world);
+	this->renderTurnTitle(world);
 
+	// render characters dynamic UI
 	for (auto& character : this->characters) {
 		this->renderCharactersHealthBar(character);
 		this->renderCharacterAbility(character);
 	}
 
 	if (world.getTurn() > 1) {
+		// ask player input before starting new turn: avoid automatic turn when no player can input
+		// and improve readability
 		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
-		this->console.renderTextXCentered("Press any key to play new turn...");
-		auto input = _getch();
+		auto input = this->console.renderTextXCentered("Press any key to play new turn...", true, true);
 
-		// clear combat text render
+		// clear previous combat text rendered
 		this->console.cursorCoordinate.X = 0;
 		this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::combatResult);
 		for (unsigned short i = 0; i < 6; i++) {
@@ -97,7 +98,7 @@ void gameRenderer::renderCombatResult(const gameWorld& world) {
 	for (auto& character : this->characters) {
 		const gameWorld::combatResult& result = world.getCombatResults(i);
 
-		// text render if player try to used his ability
+		// combat text render if player try to used his ability
 		if (result.playerInputAbility) {
 			oss << character->name;
 
@@ -112,7 +113,7 @@ void gameRenderer::renderCombatResult(const gameWorld& world) {
 			this->console.cursorCoordinate.Y++;
 		}		
 		
-		// text render anyway
+		// combat text render anyway
 		oss << character->name;
 		if (result.attackSucceeded) {
 			oss << " attacked and made " << character->getCharacteristics().attackPower << " damage.";
@@ -127,7 +128,7 @@ void gameRenderer::renderCombatResult(const gameWorld& world) {
 	}
 }
 
-const gameEndAction gameRenderer::renderEndScreen(const gameWorld& world) {
+const gameEndPlayerChoice gameRenderer::renderEndScreen(const gameWorld& world) {
 	std::ostringstream oss;
 	std::string tmp;
 
@@ -136,7 +137,7 @@ const gameEndAction gameRenderer::renderEndScreen(const gameWorld& world) {
 		this->renderCharactersHealthBar(character);
 	}
 
-	// display winner
+	// display eventual winner
 	const unsigned short winnerIndex = (unsigned short)world.getState();
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::info);
 	if (winnerIndex < constants::nbPlayers) {
@@ -150,8 +151,7 @@ const gameEndAction gameRenderer::renderEndScreen(const gameWorld& world) {
 
 askInput: // ask player what he wants to do
 	oss << "If you want to remake press: r, make a new game: n, to quit: q ";
-	this->console.renderTextXCentered(oss);
-	tmp = _getch();
+	tmp = this->console.renderTextXCentered(oss, true, true);
 
 	// analyse player input and ask again if unknown
 	std::transform(tmp.begin(), tmp.end(), tmp.begin(),
@@ -165,13 +165,13 @@ askInput: // ask player what he wants to do
 
 	// return enum
 	if (tmp.find("r") != std::string::npos) {
-		return gameEndAction::remake;
+		return gameEndPlayerChoice::remake;
 	}
 	else if (tmp.find("n") != std::string::npos) {
-		return gameEndAction::newGame;
+		return gameEndPlayerChoice::newGame;
 	}
 	else {
-		return gameEndAction::quit;
+		return gameEndPlayerChoice::quit;
 	}
 }
 
@@ -276,7 +276,7 @@ void gameRenderer::renderCharacterAbility(constSharedCharacter& character) {
 	std::cout << oss.str();
 }
 
-void gameRenderer::renderTurn(const gameWorld& world) {
+void gameRenderer::renderTurnTitle(const gameWorld& world) {
 	std::ostringstream oss;
 
 	this->console.cursorCoordinate.Y = static_cast<SHORT>(characterLineRendering::turn);

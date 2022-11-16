@@ -3,7 +3,8 @@
 #include "gameMenu.h"
 #include "gameWorld.h"
 
-enum class gameEndAction {
+// represent player choice made at the end of a combat
+enum class gameEndPlayerChoice { 
 	remake,
 	newGame,
 	quit

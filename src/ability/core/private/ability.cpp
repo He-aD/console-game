@@ -4,7 +4,7 @@
 #include "constants.h"
 #include <fstream> 
 #include "gameWorld.h"
-#include <random>
+#include "maths.h"
 
 abilityBase::abilityBase(const abilityBase::data& data, const std::string& inName, gameWorld& inWorld,
 	std::shared_ptr<abilityTargetCharacteristics> inOwnerCharacteristics)
@@ -23,18 +23,22 @@ abilityBase::abilityBase(const abilityBase::data& data, const std::string& inNam
 }
 
 const bool abilityBase::process(abilityTargetCharacteristics& characteristics) {
-	if (this->getNbTurnToBeAvailable() == 0 && this->doCastSucceed()) {
-		this->_process(characteristics);
-		this->startCooldown();
+	bool didProcess = false;
 
-		return true;
+	if (this->getNbTurnToBeAvailable() == 0) {
+		if (this->cast()) {
+			this->_process(characteristics);
+
+			didProcess = true;
+		}
+		this->startCooldown();
 	}
 
-	return false;
+	return didProcess;
 }
 
 void abilityBase::startCooldown() {
-	this->nbTurnToBeAvailable = this->cooldown + 1;
+	this->nbTurnToBeAvailable = this->cooldown;
 }
 
 void abilityBase::onNewTurn(const unsigned short turn) {
@@ -43,13 +47,8 @@ void abilityBase::onNewTurn(const unsigned short turn) {
 	}
 }
 
-const bool abilityBase::doCastSucceed() {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distr(0, 100);
-	const unsigned short random = (unsigned short)distr(gen);
-
-	return random <= this->probabilityOfSuccess;
+const bool abilityBase::cast() {
+	return maths::randRange(0, 100) <= this->probabilityOfSuccess;
 }
 
 //////////////////////// FACTORY ////////////////////////////////////

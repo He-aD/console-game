@@ -1,6 +1,7 @@
 #include "consoleUtil.h"
 #include <iostream>
 #include "constants.h"
+#include <conio.h>
 
 consoleUtil::consoleUtil() {
 	this->consoleHandle = nullptr;
@@ -12,7 +13,7 @@ consoleUtil::consoleUtil() {
 	GetConsoleScreenBufferInfo(this->consoleHandle, &this->consoleInfo);
 }
 
-const std::string consoleUtil::renderTextXCentered(const char* inText, const bool gatherInput) {
+const std::string consoleUtil::renderTextXCentered(const char* inText, const bool gatherInput, const bool useGetch) {
 	std::string input;
 
     // calculate cursor x offset from inText to be centered
@@ -25,15 +26,20 @@ const std::string consoleUtil::renderTextXCentered(const char* inText, const boo
 
     // gather input if asked
 	if (gatherInput) {
-		std::cin >> input;
+        if (useGetch) {
+            input = _getch();
+        }
+        else {
+            std::getline(std::cin, input);
+        }
 	}
 
     // return eventual input
 	return input;
 }
 
-const std::string consoleUtil::renderTextXCentered(std::ostringstream& oss, const bool gatherInput) {
-	std::string input{ this->renderTextXCentered(oss.str().c_str(), gatherInput) };
+const std::string consoleUtil::renderTextXCentered(std::ostringstream& oss, const bool gatherInput, const bool useGetch) {
+	std::string input{ this->renderTextXCentered(oss.str().c_str(), gatherInput, useGetch) };
 
 	oss.str("");
 	oss.clear();
