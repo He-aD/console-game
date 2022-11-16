@@ -21,7 +21,6 @@ public:
 	// return damage made bv source to target
 	const unsigned short tryMakeDamage(const abilityTargetCharacteristics& source, abilityTargetCharacteristics& target) const;
 
-
 public: // dodge challenge
 	struct dodgeChallenge { // dodge challenge data structure
 		dodgeChallenge();
@@ -56,5 +55,6 @@ public: // dodge challenge
 	// define challenge winner and apply proper bonus regards to difficulty
 	void applyDodgeChallengeBonus(std::vector<dodgeChallenge>& challenges) const;
 
-	const unsigned short dodgeChallengeBonus[3]{ 10, 15, 20 };
+	static inline const unsigned short dodgeChallengeMaxDifficulty{ 2 };
+	static inline const unsigned short dodgeChallengeBonus[dodgeChallengeMaxDifficulty + 1]{ 10, 15, 20 };
 };

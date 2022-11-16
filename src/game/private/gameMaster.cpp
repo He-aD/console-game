@@ -28,20 +28,20 @@ const unsigned short gameMaster::tryMakeDamage(const abilityTargetCharacteristic
 std::vector<gameMaster::dodgeChallenge> gameMaster::generateDodgeChallenges(
 	std::array<std::shared_ptr<abilityTargetCharacteristics>, constants::nbPlayers> targets) const {
 	std::vector<dodgeChallenge> challenges;
-	const unsigned int difficulty = maths::randRange(0, 2);
+	const unsigned int difficulty = maths::randRange(0, dodgeChallengeMaxDifficulty);
 	short answer{ 0 }, temp{ 0 };
 
 	// generate a different challenge for each player
 	for (auto& target : targets) {
 		std::string text;
-		const unsigned short nbIteration = difficulty == 2 ? 4 : 2;
+		const unsigned short nbIteration = difficulty == dodgeChallengeMaxDifficulty ? 4 : 2;
 
 		// calculate answer to challenge and generate text operations
 		for (unsigned short j = 0; j < nbIteration; j++) {
 			const short number = maths::randRange(-10, 10);
 
-			if (j > 0 && (difficulty == 2 && j == 2 || difficulty == 0)) { // addition
-				if (difficulty == 2) { // first number of second multiplication
+			if (j > 0 && (difficulty == dodgeChallengeMaxDifficulty && j == 2 || difficulty == 0)) { // addition
+				if (difficulty == dodgeChallengeMaxDifficulty) { // first number of second multiplication
 					temp = number;
 				}
 				else {
@@ -92,7 +92,7 @@ void gameMaster::applyDodgeChallengeBonus(std::vector<gameMaster::dodgeChallenge
 	if (challengeIndex >= 0) {
 		this->increaseDodgeFactor(
 			challenges[challengeIndex].getCharacteristic(),
-			this->dodgeChallengeBonus[challenges[challengeIndex].difficulty]);
+			dodgeChallengeBonus[challenges[challengeIndex].difficulty]);
 	}
 }
 
@@ -135,7 +135,7 @@ const bool gameMaster::dodgeChallenge::isCorrectAnswer(const std::string& answer
 	try {
 		playerAnswer = static_cast<short>(stoi(answer));
 	}
-	catch (const std::logic_error& e) {
+	catch (const std::logic_error) {
 		return false;
 	}
 

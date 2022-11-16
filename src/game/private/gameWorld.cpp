@@ -48,9 +48,11 @@ const gameEndPlayerChoice gameWorld::start() {
 		}
 
 		// do dodge challenge
-		auto dodgeChallenges = this->master->generateDodgeChallenges(characterCharacteristics);
-		this->renderer->doDodgeChallenge(*this, dodgeChallenges);
-		this->master->applyDodgeChallengeBonus(dodgeChallenges);
+		if (this->turn % dodgeChallengeTurnPeriod == 0) {
+			auto dodgeChallenges = this->master->generateDodgeChallenges(characterCharacteristics);
+			this->renderer->doDodgeChallenge(*this, dodgeChallenges);
+			this->master->applyDodgeChallengeBonus(dodgeChallenges);
+		}
 
 		// both characters try to make damage to each other
 		for (unsigned short i = 0; i < constants::nbPlayers; i++) {

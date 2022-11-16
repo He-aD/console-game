@@ -59,4 +59,7 @@ private:
 	sharedCharacter characters[constants::nbPlayers];
 	std::unique_ptr<gameRenderer> renderer;
 	std::unique_ptr<gameMaster> master;
+
+	// how often the dodge challenge is done
+	static inline const unsigned short dodgeChallengeTurnPeriod{ 3 };
 };
