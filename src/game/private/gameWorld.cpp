@@ -101,6 +101,10 @@ const gameWorld::combatResult& gameWorld::getCombatResults(const unsigned short 
 
 //////////////////////// DATA ////////////////////////////////////
 
+gameWorld::combatResult::combatResult() {
+	this->reset();
+}
+
 void gameWorld::combatResult::reset() {
 	this->abilitySucceeded = false;
 	this->damageMade = 0;

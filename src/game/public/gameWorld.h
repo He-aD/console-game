@@ -23,6 +23,8 @@ public:
 	// store how players and characters behaved each turn
 	// used to display combat text by renderer
 	struct combatResult { 
+		combatResult();
+
 		void reset();
 
 		bool playerInputAbility;
