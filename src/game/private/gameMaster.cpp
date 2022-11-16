@@ -130,10 +130,16 @@ const std::string gameMaster::dodgeChallenge::getDifficulty() const {
 }
 
 const bool gameMaster::dodgeChallenge::isCorrectAnswer(const std::string& answer) {
-	if (answer.empty()) {
+	short playerAnswer{ 0 };
+
+	try {
+		playerAnswer = static_cast<short>(stoi(answer));
+	}
+	catch (const std::logic_error& e) {
 		return false;
 	}
-	const bool isCorrect = this->correctAnswer == (short)stoi(answer);
+
+	const bool isCorrect = this->correctAnswer == playerAnswer;
 
 	if (isCorrect) {
 		std::chrono::duration<double> elapsedSeconds = std::chrono::system_clock::now() - this->startTime;

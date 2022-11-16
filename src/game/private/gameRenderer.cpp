@@ -117,7 +117,7 @@ void gameRenderer::doDodgeChallenge(const gameWorld& world, std::vector<gameMast
 			oss << challenge.text << " ";
 			playerAnswer = this->console.renderTextXCentered(oss, true);
 			if (!challenge.isCorrectAnswer(playerAnswer)) {
-				this->console.clearX(playerAnswer.length());
+				this->console.clearX(this->console.consoleInfo.dwSize.X);
 				oss << "Wrong! Try again: ";
 				goto submitChallenge;
 			}
